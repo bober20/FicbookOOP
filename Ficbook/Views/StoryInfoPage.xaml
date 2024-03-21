@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="Ficbook.Views.StoryInfoPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <StackLayout>
+        <Label Text="{Binding SelectedStory.Title}" />
+        <Label Text="{Binding SelectedStory.Content}" />
+        <Label Text="{Binding Genre.Name}" />
+        <Label Text="{Binding Show.Name}">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnShowLabelTapped" />
+            </Label.GestureRecognizers>
+        </Label>
+        <Label Text="{Binding Writer.Name}" />
+        <Button Clicked="RemoveStoryButtonClicked" Text="Remove story" />
+        <Editor Text="{Binding CommentContent}" />
+        <Button Command="{Binding AddCommentCommand}" Text="Add comment" />
+        <CollectionView ItemsSource="{Binding Comments}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Margin="8" Orientation="Horizontal">
+                        <Label Text="{Binding Content}" />
+                        <Label Text="{Binding Writer.Name}" />
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
+
+</ContentPage>

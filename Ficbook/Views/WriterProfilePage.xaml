@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="Ficbook.Views.WriterProfilePage"
+    x:DataType="viewModels:WriterProfileViewModel"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:viewModels="clr-namespace:Ficbook.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <StackLayout>
+        <Label Text="{Binding Writer.Name}" />
+        <Label Text="{Binding Writer.Age}" />
+        <Button Clicked="ShowStoriesButtonClicked" Text="Show stories" />
+        <Button Clicked="AddStoryButtonClicked" Text="Add stories" />
+    </StackLayout>
+</ContentPage>

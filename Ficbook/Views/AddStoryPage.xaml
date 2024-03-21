@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="Ficbook.Views.AddStoryPage"
+    x:DataType="viewModels:AddStoryViewModel"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:viewModels="clr-namespace:Ficbook.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <StackLayout>
+        <Entry Text="{Binding Title}" />
+        <Editor Text="{Binding Content}" />
+        <Picker
+            ItemDisplayBinding="{Binding Name}"
+            ItemsSource="{Binding Genres}"
+            SelectedItem="{Binding Genre}" />
+        <Button Clicked="AddStoryButtonClicked" Text="Add Story" />
+    </StackLayout>
+</ContentPage>
