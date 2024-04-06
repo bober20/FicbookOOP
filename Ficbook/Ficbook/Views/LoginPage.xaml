@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="Ficbook.Views.LoginPage"
+    x:DataType="viewModels:LoginViewModel"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:viewModels="clr-namespace:Ficbook.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <Grid BackgroundColor="White" RowDefinitions="110, *, 50">
+        <StackLayout Grid.Row="0">
+
+            <Frame
+                BackgroundColor="DarkGreen"
+                CornerRadius="30"
+                HeightRequest="60"
+                HorizontalOptions="Center"
+                Margin="0,50,0,0"
+                Padding="0"
+                WidthRequest="60">
+                <Image Source="Ficbook/Resources/Images/avatar.svg" />
+            </Frame>
+
+        </StackLayout>
+
+        <Grid
+            Grid.Row="1"
+            Margin="20,20,20,0"
+            RowDefinitions="50, 50, *"
+            RowSpacing="5">
+
+            <Label
+                FontAttributes="Bold"
+                FontSize="Title"
+                Grid.Row="0"
+                HorizontalOptions="Center"
+                Text="Welcome!" />
+            <Label
+                FontSize="Title"
+                Grid.Row="1"
+                HorizontalOptions="Center"
+                Text="Sign in to continue!" />
+
+            <StackLayout
+                Grid.Row="2"
+                HorizontalOptions="FillAndExpand"
+                Orientation="Vertical"
+                Spacing="10">
+                <Frame
+                    BackgroundColor="Transparent"
+                    BorderColor="Black"
+                    CornerRadius="30">
+                    <Entry
+                        FontAttributes="Bold"
+                        Placeholder="Username"
+                        Text="{Binding Username}"
+                        TextColor="Black"
+                        VerticalOptions="Center" />
+                </Frame>
+                <Frame
+                    BackgroundColor="Transparent"
+                    BorderColor="Black"
+                    CornerRadius="30">
+                    <Entry
+                        FontAttributes="Bold"
+                        Placeholder="Password"
+                        Text="{Binding Password}"
+                        TextColor="Black"
+                        VerticalOptions="Center" />
+                </Frame>
+                <Button
+                    BackgroundColor="LightGreen"
+                    Command="{Binding LoginCommand}"
+                    Text="Sign in"
+                    VerticalOptions="Center" />
+            </StackLayout>
+
+        </Grid>
+    </Grid>
+
+</ContentPage>
