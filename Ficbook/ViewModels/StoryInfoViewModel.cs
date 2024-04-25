@@ -27,7 +27,7 @@ public partial class StoryInfoViewModel : ObservableObject
         Writer = _dbContext.Writers.Find(SelectedStory.WriterId);
         Comments = _dbContext.Comments.Where(story => story.StoryId == SelectedStory.Id).ToList();
 
-        RemoveButtonStatus = SelectedStory.WriterId == Writer.Id;
+        RemoveButtonStatus = SelectedStory.WriterId == App.UserInfo.Id;
     }
     
     public async void RemoveStory()
@@ -35,6 +35,14 @@ public partial class StoryInfoViewModel : ObservableObject
         foreach (var comment in Comments)
         {
             _dbContext.Comments.Remove(comment);
+        }
+
+        var favouriteStories = _dbContext.StoriesToReadLater
+            .Where(story => story.StoryId == SelectedStory.Id);
+
+        foreach (var fs in favouriteStories)
+        {
+            _dbContext.Remove(fs);
         }
 
         _dbContext.Remove(SelectedStory);
@@ -62,9 +70,13 @@ public partial class StoryInfoViewModel : ObservableObject
         await _dbContext.StoriesToReadLater.AddAsync(new StoriesToReadLater
         {
             StoryId = SelectedStory.Id,
-            WriterId = Writer.Id
+            WriterId = App.UserInfo.Id
         });
         
         await _dbContext.SaveChangesAsync();
+        
+        await App.Current.MainPage.DisplayAlert("Favourite story",
+            "Story was added to favourite.", "Ok");
+
     }
 }

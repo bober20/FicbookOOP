@@ -26,13 +26,13 @@ public partial class AdminPage : ContentPage
         _adminViewModel.Search();
     }
 
-    private void SelectableItemsView_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
-    {
-        var collectionView = sender as CollectionView;
-
-        if (collectionView?.SelectedItem is null) return;
-        Writer? selectedWriter = collectionView.SelectedItem as Writer;
-
-        _adminViewModel.SelectedWriter = selectedWriter;
-    }
+    // private void SelectableItemsView_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    // {
+    //     var collectionView = sender as CollectionView;
+    //
+    //     if (collectionView?.SelectedItem is null) return;
+    //     Writer? selectedWriter = collectionView.SelectedItem as Writer;
+    //
+    //     _adminViewModel.SelectedWriter = selectedWriter;
+    // }
 }

@@ -27,8 +27,6 @@ public partial class MainViewModel : ObservableObject
         GetAllStories();
         
         FavouriteStoriesStatus = FavouriteStories.Count != 0;
-        
-       
     }
 
     private void GetFavouriteStories()
@@ -63,13 +61,10 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     public void Search()
     {
-        if (string.IsNullOrWhiteSpace(SearchText))
-        {
-            GetAllStories();
-        }
-        
         GetAllStories();
+        GetFavouriteStories();
         
         AllWritersStories = AllWritersStories.Where(story => story.Title.Contains(SearchText)).ToList();
+        FavouriteStories = FavouriteStories.Where(story => story.Title.Contains(SearchText)).ToList();
     }
 }

@@ -15,11 +15,6 @@ public partial class StoryInfoPage : ContentPage
         InitializeComponent();
     }
 
-    // private void OnShowLabelTapped(object sender, TappedEventArgs e)
-    // {
-    //     Navigation.PushAsync(new ShowInfoPage(new ShowInfoViewModel(_storyInfoViewModel.Show, new ApplicationDbContext())));
-    // }
-
     private async void RemoveStoryButtonClicked(object sender, EventArgs e)
     {
         _storyInfoViewModel.RemoveStory();
@@ -33,10 +28,5 @@ public partial class StoryInfoPage : ContentPage
         }
         
         await Navigation.PopAsync();
-    }
-
-    private void AddCommentButtonClicked(object sender, EventArgs e)
-    {
-        throw new NotImplementedException();
     }
 }

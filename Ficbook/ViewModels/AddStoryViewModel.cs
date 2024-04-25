@@ -38,6 +38,8 @@ public partial class AddStoryViewModel : ObservableObject
 
             await _dbContext.AddAsync(newStory);
             await _dbContext.SaveChangesAsync();
+            
+            return;
         }
         
         await App.Current.MainPage.DisplayAlert("Story wasn't added",

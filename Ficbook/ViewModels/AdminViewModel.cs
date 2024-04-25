@@ -25,41 +25,62 @@ public partial class AdminViewModel : ObservableObject
     [RelayCommand]
     private async void BanWriter()
     {
-        foreach (var writer in Writers)
+        if (SelectedWriter.IsBanned)
         {
-            if (writer.Id == SelectedWriter.Id)
-            {
-                writer.IsBanned = true;
-                _dbContext.Writers.Update(writer);
-                await _dbContext.Notifications.AddAsync(new Notification
-                {
-                    Content = NotificationContent,
-                    WriterId = SelectedWriter.Id,
-                    NotificationDate = DateTime.Now
-                });
-                
-                await _dbContext.SaveChangesAsync();
-                
-                break;
-            }
+            await App.Current.MainPage.DisplayAlert("Writers list",
+                "Writer is already banned.", "Ok");
+            
+            return;
         }
+
+        if (string.IsNullOrWhiteSpace(NotificationContent))
+        {
+            await App.Current.MainPage.DisplayAlert("Writers list",
+                "Notification content is empty.", "Ok");
+            
+            return;
+        }
+
+        SelectedWriter.IsBanned = true;
+
+        await _dbContext.Notifications.AddAsync(new Notification
+        {
+            Content = NotificationContent,
+            WriterId = SelectedWriter.Id,
+            NotificationDate = DateTime.Now,
+            IsProblemSolved = false
+        });
+
+        await _dbContext.SaveChangesAsync();
     }
     
     [RelayCommand]
     private async void UnbanWriter()
     {
-        foreach (var writer in Writers)
+        if (!SelectedWriter.IsBanned)
         {
-            if (writer.Id == SelectedWriter.Id)
-            {
-                writer.IsBanned = false;
-                
-                _dbContext.Writers.Update(writer);
-                await _dbContext.SaveChangesAsync();
-                
-                break;
-            }
+            await App.Current.MainPage.DisplayAlert("Writers list",
+                "Writer is unbanned.", "Ok");
+            
+            return;
         }
+
+        SelectedWriter.IsBanned = false;
+
+        var notifications = _dbContext.Notifications
+            .Where(n => n.IsProblemSolved == false && n.WriterId == SelectedWriter.Id).ToList();
+
+        if (notifications.Count != 0)
+        {
+            foreach (var n in notifications)
+            {
+                n.IsProblemSolved = true;
+            }
+            
+            await _dbContext.SaveChangesAsync();
+        }
+        
+        await _dbContext.SaveChangesAsync();
     }
 
     [RelayCommand]

@@ -27,6 +27,12 @@ public partial class WriterProfileViewModel : ObservableObject
          
         await Shell.Current.GoToAsync($"//LoginPage");
     }
+
+    // [RelayCommand]
+    // private void DeleteAccount()
+    // {
+    //     
+    // }
     
     // [RelayCommand]
     // private void Refresh()

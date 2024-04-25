@@ -19,6 +19,14 @@
                                 <StackLayout>
                                     <Label Text="{Binding Content}" />
                                     <Label Text="{Binding NotificationDate}" />
+                                    <Label>
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Solved:" />
+                                                <Span Text="{Binding IsProblemSolved}" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
                                 </StackLayout>
                             </Frame>
                         </DataTemplate>
