@@ -9,14 +9,32 @@ public partial class WriterProfileViewModel : ObservableObject
 {
     [ObservableProperty]
     private Writer _writer;
+    
+    [ObservableProperty] private bool _isRefreshing;
 
-    public WriterProfileViewModel(Writer writer, ApplicationDbContext dbContext)
+    public WriterProfileViewModel(ApplicationDbContext dbContext)
     {
-        Writer = writer;
+        Writer = App.UserInfo;
     }
-
-    public Writer GetWriter()
+    
+    [RelayCommand]
+    private async void LogOut()
     {
-        return Writer;
+        if (Preferences.ContainsKey(nameof(App.UserInfo)))
+        {
+            Preferences.Remove(nameof(App.UserInfo));
+        }
+         
+        await Shell.Current.GoToAsync($"//LoginPage");
     }
+    
+    // [RelayCommand]
+    // private void Refresh()
+    // {
+    //     IsRefreshing = true;
+    //     
+    //     PublishedStories = _dbContext.Stories.Where(story => story.WriterId == Writer.Id).ToList();
+    //     
+    //     IsRefreshing = false;
+    // }
 }

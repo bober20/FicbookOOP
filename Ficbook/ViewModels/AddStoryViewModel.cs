@@ -11,8 +11,6 @@ public partial class AddStoryViewModel : ObservableObject
     [ObservableProperty] private Genre _genre;
     [ObservableProperty] private List<Genre> _genres;
     [ObservableProperty] private Writer _writer;
-
-    private IDbServices _dbService = new SQLiteService();
     
     private ApplicationDbContext _dbContext;
 
@@ -21,20 +19,28 @@ public partial class AddStoryViewModel : ObservableObject
         _dbContext = dbContext;
         Genres = _dbContext.Genres.ToList();
         Writer = writer;
+        Genre = Genres[0];
     }
     
-    public void AddStory()
+    public async void AddStory()
     {
-        Story newStory = new Story
+        if (!string.IsNullOrWhiteSpace(Title) ||
+            !string.IsNullOrWhiteSpace(Content))
         {
-            Title = Title,
-            Content = Content,
-            WriterId = Writer.Id,
-            ShowId = 1,
-            GenreId = Genre.Id
-        };
+            Story newStory = new Story
+            {
+                Title = Title,
+                Content = Content,
+                WriterId = Writer.Id,
+                ShowId = 1,
+                GenreId = Genre.Id
+            };
 
-        _dbContext.Add(newStory);
-        _dbContext.SaveChanges();
+            await _dbContext.AddAsync(newStory);
+            await _dbContext.SaveChangesAsync();
+        }
+        
+        await App.Current.MainPage.DisplayAlert("Story wasn't added",
+            "Fields are empty. Try again.", "Ok");
     }
 }

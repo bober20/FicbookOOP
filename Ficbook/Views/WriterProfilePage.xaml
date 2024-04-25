@@ -1,15 +1,54 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
 <ContentPage
+    Shell.NavBarIsVisible="False"
     x:Class="Ficbook.Views.WriterProfilePage"
     x:DataType="viewModels:WriterProfileViewModel"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:viewModels="clr-namespace:Ficbook.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     <StackLayout>
-        <Label Text="{Binding Writer.Name}" />
-        <Label Text="{Binding Writer.Age}" />
-        <Button Clicked="ShowStoriesButtonClicked" Text="Show stories" />
-        <Button Clicked="AddStoryButtonClicked" Text="Add stories" />
+        <StackLayout>
+            <ScrollView>
+                <Grid RowDefinitions="*, *">
+                    <Frame
+                        CornerRadius="30"
+                        Grid.Row="0"
+                        HeightRequest="400"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="FillAndExpand"
+                        WidthRequest="400">
+                        <Image
+                            Aspect="AspectFill"
+                            HeightRequest="400"
+                            Source="Ficbook/Resources/Images/author3.jpg"
+                            WidthRequest="400" />
+                    </Frame>
+                    <StackLayout
+                        Grid.Row="1"
+                        Margin="4,0,4,0"
+                        Spacing="2">
+                        <Label FontSize="25" HorizontalTextAlignment="Start">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding Writer.Name}" />
+                                    <Span Text=", " />
+                                    <Span Text="{Binding Writer.Age}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label
+                            FontSize="15"
+                            HorizontalTextAlignment="Start"
+                            Text="{Binding Writer.MorePersonalInfo}" />
+                    </StackLayout>
+                </Grid>
+            </ScrollView>
+        </StackLayout>
+        <Button
+            BackgroundColor="Black"
+            Command="{Binding LogOutCommand}"
+            Margin="3,3,3,3"
+            Text="Log out" />
     </StackLayout>
 </ContentPage>

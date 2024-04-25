@@ -1,15 +1,193 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
+    Shell.NavBarIsVisible="False"
     x:Class="Ficbook.Views.MainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
-    <!-- <ListView x:Name="Empl"> -->
-    <!--     <ListView.ItemTemplate> -->
-    <!--         <DataTemplate> -->
-    <!--             <Label Text="{Binding Name}" /> -->
-    <!--         </DataTemplate> -->
-    <!--     </ListView.ItemTemplate> -->
-    <!-- </ListView> -->
+
+    <StackLayout>
+        <Frame HeightRequest="60" Padding="0,0,3,7">
+            <SearchBar
+                CancelButtonColor="Black"
+                Margin="3,3,3,3"
+                Placeholder="Search stories/authors/genres..."
+                Text="{Binding SearchText}"
+                TextChanged="SearchBarTextChanged" />
+        </Frame>
+        <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
+            <ScrollView>
+                <StackLayout>
+                    <StackLayout Margin="5,5,5,5">
+                        <Label FontSize="Title" Text="Genres" />
+                        <ScrollView Orientation="Horizontal">
+                            <CollectionView
+                                ItemsLayout="HorizontalList"
+                                ItemsSource="{Binding Genres}"
+                                SelectionMode="Single">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackLayout
+                                            Margin="0,3,3,3"
+                                            Orientation="Horizontal"
+                                            Padding="2,2,2,2">
+                                            <Frame
+                                                CornerRadius="20"
+                                                HeightRequest="30"
+                                                Padding="0,2,0,0"
+                                                WidthRequest="120">
+                                                <Label HorizontalOptions="Center" Text="{Binding Name}" />
+                                            </Frame>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </ScrollView>
+                    </StackLayout>
+
+                    <StackLayout IsVisible="{Binding FavouriteStoriesStatus}" Margin="5,5,5,5">
+                        <Label FontSize="Title" Text="Favourite stories" />
+                        <ScrollView Orientation="Horizontal">
+                            <CollectionView
+                                ItemsLayout="HorizontalList"
+                                ItemsSource="{Binding FavouriteStories}"
+                                SelectionChanged="StorySelected"
+                                SelectionMode="Single">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackLayout
+                                            HeightRequest="180"
+                                            Margin="0,3,3,3"
+                                            Padding="2,2,2,2"
+                                            WidthRequest="100">
+                                            <Frame
+                                                CornerRadius="20"
+                                                HeightRequest="160"
+                                                Padding="0,0,0,0"
+                                                WidthRequest="100">
+                                                <Image
+                                                    HeightRequest="160"
+                                                    Source="Ficbook/Resources/Images/story.png"
+                                                    WidthRequest="110" />
+                                            </Frame>
+                                            <Label Text="{Binding Title}" />
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </ScrollView>
+                    </StackLayout>
+
+                    <StackLayout>
+                        <Label FontSize="Title" Text="Stories from other authors" />
+                        <CollectionView
+                            ItemsSource="{Binding AllWritersStories}"
+                            SelectionChanged="StorySelected"
+                            SelectionMode="Single">
+                            <CollectionView.ItemsLayout>
+                                <GridItemsLayout Orientation="Vertical" Span="2" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout
+                                        HorizontalOptions="FillAndExpand"
+                                        Margin="0,3,3,3"
+                                        Padding="2,2,2,2"
+                                        VerticalOptions="FillAndExpand">
+                                        <Frame
+                                            CornerRadius="20"
+                                            HeightRequest="280"
+                                            HorizontalOptions="FillAndExpand"
+                                            Padding="0,0,0,0"
+                                            VerticalOptions="FillAndExpand">
+                                            <Image
+                                                HorizontalOptions="FillAndExpand"
+                                                Source="Ficbook/Resources/Images/story.png"
+                                                VerticalOptions="FillAndExpand" />
+                                        </Frame>
+                                        <Label Text="{Binding Title}" />
+                                    </StackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </StackLayout>
+
+
+                    <!-- <ScrollView Orientation="Horizontal"> -->
+                    <!--     <StackLayout Margin="5,5,5,5"> -->
+                    <!--         <Label FontSize="Title" Text="Authors" /> -->
+                    <!--  <CollectionView  -->
+                    <!--  ItemsLayout="HorizontalList"  -->
+                    <!--  ItemsSource="{Binding Writers}"  -->
+                    <!--  SelectionMode="Single">  -->
+                    <!--             <CollectionView.ItemTemplate> -->
+                    <!--                 <DataTemplate> -->
+                    <!--  <StackLayout  -->
+                    <!--  HeightRequest="180"  -->
+                    <!--  Margin="0,3,3,3"  -->
+                    <!--  Padding="2,2,2,2"  -->
+                    <!--  WidthRequest="100">  -->
+                    <!--  <Frame  -->
+                    <!--  CornerRadius="20"  -->
+                    <!--  HeightRequest="160"  -->
+                    <!--  Padding="0,0,0,0"  -->
+                    <!--  WidthRequest="100">  -->
+                    <!--  <Image  -->
+                    <!--  HeightRequest="160"  -->
+                    <!--  Source="Ficbook/Resources/Images/author3.png"  -->
+                    <!--  WidthRequest="110" />  -->
+                    <!--                         </Frame> -->
+                    <!--                         <Label Text="{Binding Name}" /> -->
+                    <!--                     </StackLayout> -->
+                    <!--                 </DataTemplate> -->
+                    <!--             </CollectionView.ItemTemplate> -->
+                    <!--         </CollectionView> -->
+                    <!--     </StackLayout> -->
+                    <!-- </ScrollView> -->
+
+
+                </StackLayout>
+
+                <!-- <StackLayout> -->
+                <!--  <CollectionView  -->
+                <!--  ItemsSource="{Binding Stories}"  -->
+                <!--  SelectionChanged="StorySelected"  -->
+                <!--  SelectionMode="Single">  -->
+                <!--         <CollectionView.ItemTemplate> -->
+                <!--             <DataTemplate> -->
+                <!--  <Grid  -->
+                <!--  BackgroundColor="Transparent"  -->
+                <!--  ColumnDefinitions="3*, 7*"  -->
+                <!--  HeightRequest="210">  -->
+                <!--                     <Border HeightRequest="180" StrokeShape="RoundRectangle 20"> -->
+                <!--                         <Image Source="Ficbook/Resources/Images/story.png" /> -->
+                <!--                     </Border> -->
+                <!--    -->
+                <!--  <StackLayout  -->
+                <!--  Grid.Column="1"  -->
+                <!--  Margin="8"  -->
+                <!--  Orientation="Vertical">  -->
+                <!--  <Label  -->
+                <!--  FontAttributes="Bold"  -->
+                <!--  FontSize="20"  -->
+                <!--  Text="{Binding Title}"  -->
+                <!--  TextColor="Black" />  -->
+                <!--  <Label  -->
+                <!--  FontSize="14"  -->
+                <!--  HorizontalTextAlignment="Start"  -->
+                <!--  MaxLines="6"  -->
+                <!--  Text="{Binding Content}"  -->
+                <!--  TextColor="Black" />  -->
+                <!--                     </StackLayout> -->
+                <!--                 </Grid> -->
+                <!--             </DataTemplate> -->
+                <!--         </CollectionView.ItemTemplate> -->
+                <!--     </CollectionView> -->
+                <!-- </StackLayout> -->
+
+            </ScrollView>
+        </RefreshView>
+    </StackLayout>
+
 </ContentPage>
 
 

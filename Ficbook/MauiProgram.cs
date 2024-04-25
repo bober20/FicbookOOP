@@ -33,24 +33,20 @@ public static class MauiProgram
 		builder.Services.AddTransient<AdminPage>();
 		builder.Services.AddTransient<AdminViewModel>();
 		
-		builder.Services.AddTransient<EditWriterListPage>();
-		builder.Services.AddTransient<EditWriterViewModel>();
-		
 		builder.Services.AddTransient<LoginPage>();
 		builder.Services.AddTransient<LoginViewModel>();
 		
 		builder.Services.AddTransient<MainPage>();
 		builder.Services.AddTransient<MainViewModel>();
 		
-		builder.Services.AddTransient<ShowInfoPage>();
-		builder.Services.AddTransient<ShowInfoViewModel>();
-		
 		builder.Services.AddTransient<StoryInfoPage>();
 		builder.Services.AddTransient<StoryInfoViewModel>();
+		
+		builder.Services.AddTransient<NotificationsPage>();
+		builder.Services.AddTransient<NotificationsViewModel>();
 
-		
-		
-		//builder.Services.AddTransient<MainPage>();
+		builder.Services.AddTransient<RegistrationPage>();
+		builder.Services.AddTransient<RegistrationViewModel>();
 
 #if DEBUG
 		builder.Logging.AddDebug();

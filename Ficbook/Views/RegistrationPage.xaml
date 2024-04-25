@@ -3,14 +3,14 @@
 <ContentPage
     BackgroundImageSource="Ficbook/Resources/Images/background2.svg"
     Shell.NavBarIsVisible="False"
-    x:Class="Ficbook.Views.LoginPage"
-    x:DataType="viewModels:LoginViewModel"
+    x:Class="Ficbook.Views.RegistrationPage"
+    x:DataType="viewModels:RegistrationViewModel"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:viewModels="clr-namespace:Ficbook.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     <Frame
         CornerRadius="30"
-        HeightRequest="430"
+        HeightRequest="500"
         WidthRequest="350">
         <Grid BackgroundColor="White" RowDefinitions="90, *">
             <StackLayout Grid.Row="0">
@@ -33,7 +33,7 @@
                     FontSize="Title"
                     Grid.Row="0"
                     HorizontalOptions="Center"
-                    Text="Sign in to continue!" />
+                    Text="Sign up to continue!" />
                 <StackLayout
                     Grid.Row="1"
                     HorizontalOptions="FillAndExpand"
@@ -64,17 +64,30 @@
                             TextColor="Black"
                             VerticalOptions="Center" />
                     </Frame>
+                    <Frame
+                        BackgroundColor="Transparent"
+                        BorderColor="Black"
+                        CornerRadius="30"
+                        Padding="10,2,10,2">
+                        <Entry
+                            FontAttributes="Bold"
+                            IsPassword="True"
+                            Placeholder="Password confirmation"
+                            Text="{Binding PasswordConfirmation}"
+                            TextColor="Black"
+                            VerticalOptions="Center" />
+                    </Frame>
                     <Button
                         BackgroundColor="Black"
-                        Command="{Binding LoginCommand}"
+                        Command="{Binding SignUpCommand}"
                         Margin="0,5,0,0"
-                        Text="Sign in"
+                        Text="Sign up"
                         VerticalOptions="Center" />
                     <Button
                         BackgroundColor="Black"
-                        Command="{Binding GoToRegistrationPageCommand}"
+                        Command="{Binding GoToLoginPageCommand}"
                         Margin="0,5,0,0"
-                        Text="Sign Up"
+                        Text="Sign in"
                         VerticalOptions="Center" />
                 </StackLayout>
             </Grid>

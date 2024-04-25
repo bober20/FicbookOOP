@@ -1,33 +1,88 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
 <ContentPage
+    Title="{Binding SelectedStory.Title}"
     x:Class="Ficbook.Views.StoryInfoPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
-
-    <StackLayout>
-        <Label Text="{Binding SelectedStory.Title}" />
-        <Label Text="{Binding SelectedStory.Content}" />
-        <Label Text="{Binding Genre.Name}" />
-        <Label Text="{Binding Show.Name}">
-            <Label.GestureRecognizers>
-                <TapGestureRecognizer Tapped="OnShowLabelTapped" />
-            </Label.GestureRecognizers>
-        </Label>
-        <Label Text="{Binding Writer.Name}" />
-        <Button Clicked="RemoveStoryButtonClicked" Text="Remove story" />
-        <Editor Text="{Binding CommentContent}" />
-        <Button Command="{Binding AddCommentCommand}" Text="Add comment" />
-        <CollectionView ItemsSource="{Binding Comments}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <StackLayout Margin="8" Orientation="Horizontal">
-                        <Label Text="{Binding Content}" />
-                        <Label Text="{Binding Writer.Name}" />
-                    </StackLayout>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </StackLayout>
-
+    <ScrollView>
+        <StackLayout>
+            <Frame
+                CornerRadius="30"
+                HeightRequest="400"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                WidthRequest="400">
+                <Image
+                    Aspect="AspectFill"
+                    HeightRequest="400"
+                    Source="Ficbook/Resources/Images/author3.jpg"
+                    WidthRequest="400" />
+            </Frame>
+            <Label
+                FontSize="25"
+                HorizontalTextAlignment="Start"
+                Text="{Binding SelectedStory.Title}">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{Binding SelectedStory.Title}" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <Label FontSize="15" HorizontalTextAlignment="Start">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Genre: " />
+                        <Span Text="{Binding Genre.Name}" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <Label FontSize="15" HorizontalTextAlignment="Start">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Show: " />
+                        <Span Text="{Binding Show.Name}" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <Label FontSize="15" HorizontalTextAlignment="Start">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Writer: " />
+                        <Span Text="{Binding Writer.Name}" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <Label Text="{Binding SelectedStory.Content}" />
+            <Button
+                BackgroundColor="Black"
+                Clicked="RemoveStoryButtonClicked"
+                IsVisible="{Binding RemoveButtonStatus}"
+                Margin="3,3,3,3"
+                Text="Remove story" />
+            <Button
+                BackgroundColor="Black"
+                Command="{Binding AddStoryToFavouriteCommand}"
+                Margin="3,3,3,3"
+                Text="Add story to favourite" />
+            <Entry Placeholder="Comment..." Text="{Binding CommentContent}" />
+            <Button
+                BackgroundColor="Black"
+                Command="{Binding AddCommentCommand}"
+                Margin="3,3,3,3"
+                Text="Add comment" />
+            <CollectionView ItemsSource="{Binding Comments}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="3,3,3,3" Padding="3,3,3,3">
+                            <StackLayout>
+                                <Label Text="{Binding Content}" />
+                                <!-- <Label Text="{Binding }" /> -->
+                            </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ScrollView>
 </ContentPage>

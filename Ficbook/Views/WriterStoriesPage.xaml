@@ -1,24 +1,54 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    Title="WriterPage"
+    Title="{Binding Writer.Name}"
     x:Class="Ficbook.Views.WriterStoriesPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     <StackLayout>
-        <Label Text="{Binding Writer.Name}" />
+        <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
+            <ScrollView>
+                <StackLayout>
+                    <CollectionView
+                        ItemsSource="{Binding PublishedStories}"
+                        SelectionChanged="StorySelected"
+                        SelectionMode="Single">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid
+                                    BackgroundColor="Transparent"
+                                    ColumnDefinitions="3*, 7*"
+                                    HeightRequest="210">
+                                    <Border HeightRequest="180" StrokeShape="RoundRectangle 20">
+                                        <Image Source="Ficbook/Resources/Images/story.png" />
+                                    </Border>
 
-        <CollectionView
-            ItemsSource="{Binding PublishedStories}"
-            SelectionChanged="StorySelected"
-            SelectionMode="Single">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <StackLayout Margin="8" Orientation="Horizontal">
-                        <Label Text="{Binding Title}" />
-                        <!-- <Button ></Button> -->
-                    </StackLayout>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                                    <StackLayout
+                                        Grid.Column="1"
+                                        Margin="8"
+                                        Orientation="Vertical">
+                                        <Label
+                                            FontAttributes="Bold"
+                                            FontSize="20"
+                                            Text="{Binding Title}"
+                                            TextColor="Black" />
+                                        <Label
+                                            FontSize="14"
+                                            HorizontalTextAlignment="Start"
+                                            MaxLines="6"
+                                            Text="{Binding Content}"
+                                            TextColor="Black" />
+                                    </StackLayout>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+            </ScrollView>
+        </RefreshView>
+        <Button
+            BackgroundColor="Black"
+            Clicked="AddStoryButtonClicked"
+            Margin="3,3,3,3"
+            Text="Add story" />
     </StackLayout>
 </ContentPage>

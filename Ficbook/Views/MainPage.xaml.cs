@@ -7,25 +7,47 @@ namespace Ficbook.Views;
 public partial class MainPage : ContentPage
 {
 	private MainViewModel _mainViewModel;
-	private readonly ApplicationDbContext _dbContext;
 	
-	public MainPage(ApplicationDbContext dbContext)
+	public MainPage(MainViewModel mainViewModel)
 	{
+		BindingContext = _mainViewModel = mainViewModel;
 		
-		// _dbContext = new ApplicationDbContext();
-		// //_mainViewModel = new MainViewModel(new SQLiteService());
-		// InitializeComponent();
+		InitializeComponent();
+	}
+	
+	private async void StorySelected(object sender, SelectionChangedEventArgs e)
+	{
+		var collectionView = sender as CollectionView;
+
+		if (collectionView?.SelectedItem is null) return;
+		Story? selectedStory = collectionView.SelectedItem as Story;
+	
+		collectionView.SelectedItem = null;
+	
+		await Navigation.PushAsync(new StoryInfoPage(selectedStory));
+	}
+	
+	private async void GenreSelected(object sender, SelectionChangedEventArgs e)
+	{
+		// var collectionView = sender as CollectionView;
 		//
-		// _dbContext.Writers.Add(new Writer { Name = "Oleg"});
-		// _dbContext.Writers.Add(new Writer { Name = "Masha"});
+		// if (collectionView?.SelectedItem is null) return;
+		// Genre? selectedGenre = collectionView.SelectedItem as Genre;
 		//
-		// _dbContext.SaveChanges();
-		// var writers = _dbContext.Writers;
+		// collectionView.SelectedItem = null;
 		//
-		// Empl.ItemsSource = writers.ToList();
+		// await Navigation.PushAsync(new StoryInfoPage(selectedStory));
+	}
+		
+	private void SearchBarTextChanged(object? sender, TextChangedEventArgs e)
+	{
+		_mainViewModel.Search();
 	}
 
-	
+	// private void StorySelected(object? sender, SelectionChangedEventArgs e)
+	// {
+	// 	throw new NotImplementedException();
+	// }
 }
 
 

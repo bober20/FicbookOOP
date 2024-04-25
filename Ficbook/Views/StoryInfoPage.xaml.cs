@@ -10,15 +10,15 @@ public partial class StoryInfoPage : ContentPage
     
     public StoryInfoPage(Story selectedStory)
     {
-        InitializeComponent();
-
         BindingContext = _storyInfoViewModel = new StoryInfoViewModel(selectedStory, new ApplicationDbContext());
+        
+        InitializeComponent();
     }
 
-    private void OnShowLabelTapped(object sender, TappedEventArgs e)
-    {
-        Navigation.PushAsync(new ShowInfoPage(new ShowInfoViewModel(_storyInfoViewModel.Show, new ApplicationDbContext())));
-    }
+    // private void OnShowLabelTapped(object sender, TappedEventArgs e)
+    // {
+    //     Navigation.PushAsync(new ShowInfoPage(new ShowInfoViewModel(_storyInfoViewModel.Show, new ApplicationDbContext())));
+    // }
 
     private async void RemoveStoryButtonClicked(object sender, EventArgs e)
     {

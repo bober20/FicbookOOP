@@ -20,26 +20,19 @@ public partial class AdminPage : ContentPage
         
         InitializeComponent();
     }
+    
+    private void SearchBarTextChanged(object? sender, TextChangedEventArgs e)
+    {
+        _adminViewModel.Search();
+    }
 
-    private void WriterSelected(object sender, EventArgs e)
+    private void SelectableItemsView_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         var collectionView = sender as CollectionView;
 
         if (collectionView?.SelectedItem is null) return;
-        var selectedWriter = collectionView.SelectedItem as Writer;
-            
-        collectionView.SelectedItem = null;
-            
-        Navigation.PushAsync(new WriterProfilePage(new WriterProfileViewModel(selectedWriter, new ApplicationDbContext())));
-    }
+        Writer? selectedWriter = collectionView.SelectedItem as Writer;
 
-    private void RemoveWriterTapped(object sender, TappedEventArgs e)
-    {
-        //throw new NotImplementedException();
-    }
-
-    private void EditUserListButtonClicked(object sender, EventArgs e)
-    {
-        Navigation.PushAsync(new EditWriterListPage(new EditWriterViewModel(new ApplicationDbContext())));
+        _adminViewModel.SelectedWriter = selectedWriter;
     }
 }

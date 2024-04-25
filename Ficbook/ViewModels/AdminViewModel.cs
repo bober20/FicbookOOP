@@ -8,10 +8,9 @@ namespace Ficbook.ViewModels;
 public partial class AdminViewModel : ObservableObject
 {
     [ObservableProperty] private List<Writer> _writers;
-
-    [ObservableProperty] private bool _isRefreshing;
-    
-    //private IDbServices _dbService = new SQLiteService();
+    [ObservableProperty] private Writer _selectedWriter;
+    [ObservableProperty] private string _notificationContent;
+    [ObservableProperty] private string _searchText;
     
     private ApplicationDbContext _dbContext;
 
@@ -19,37 +18,58 @@ public partial class AdminViewModel : ObservableObject
     {
         _dbContext = dbContext;
         
-        GetWriters();
-    }
-
-    private void GetWriters()
-    {
-        Writers = _dbContext.Writers.Where(writer => !writer.IsAdmin && !writer.IsBanned).ToList();
-        //Writers = new List<Writer>();
-
-        // foreach (var writer in allWriters)
-        // {
-        //     if (!writer.IsAdmin && !writer.IsBanned)
-        //     {
-        //         Writers.Add(writer);
-        //     }
-        // }
-        
-        // //List<BannedWriters> bannedWriters = _dbService.GetAllBannedWriters().ToList();
-        //
-        // foreach (var item in bannedWriters)
-        // {
-        //     Writers.RemoveAll(writer => writer.Id == item.WriterId);
-        // }
+        Writers = _dbContext.Writers.Where(writer => writer.IsAdmin == false).ToList();
+        SelectedWriter = Writers[0];
     }
 
     [RelayCommand]
-    private void Refresh()
+    private async void BanWriter()
     {
-        IsRefreshing = true;
-        
-        GetWriters();
-        
-        IsRefreshing = false;
+        foreach (var writer in Writers)
+        {
+            if (writer.Id == SelectedWriter.Id)
+            {
+                writer.IsBanned = true;
+                _dbContext.Writers.Update(writer);
+                await _dbContext.Notifications.AddAsync(new Notification
+                {
+                    Content = NotificationContent,
+                    WriterId = SelectedWriter.Id,
+                    NotificationDate = DateTime.Now
+                });
+                
+                await _dbContext.SaveChangesAsync();
+                
+                break;
+            }
+        }
+    }
+    
+    [RelayCommand]
+    private async void UnbanWriter()
+    {
+        foreach (var writer in Writers)
+        {
+            if (writer.Id == SelectedWriter.Id)
+            {
+                writer.IsBanned = false;
+                
+                _dbContext.Writers.Update(writer);
+                await _dbContext.SaveChangesAsync();
+                
+                break;
+            }
+        }
+    }
+
+    [RelayCommand]
+    private static async void LogOut()
+    {
+        await Shell.Current.GoToAsync($"//LoginPage");
+    }
+    
+    public void Search()
+    {
+        Writers = _dbContext.Writers.Where(writer => writer.Name.Contains(SearchText)).ToList();
     }
 }

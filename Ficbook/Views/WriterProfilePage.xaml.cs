@@ -13,14 +13,4 @@ public partial class WriterProfilePage : ContentPage
 
         BindingContext = _writerProfileViewModel = writerProfileViewModel;
     }
-
-    private async void ShowStoriesButtonClicked(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new WriterStoriesPage(new WriterStoriesViewModel(_writerProfileViewModel.GetWriter(), new ApplicationDbContext())));
-    }
-
-    private async void AddStoryButtonClicked(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new AddStoryPage(new AddStoryViewModel(_writerProfileViewModel.GetWriter(), new ApplicationDbContext())));
-    }
 }

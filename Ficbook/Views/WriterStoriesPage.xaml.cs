@@ -10,9 +10,9 @@ public partial class WriterStoriesPage : ContentPage
 	
 	public WriterStoriesPage(WriterStoriesViewModel writerStoriesViewModel)
 	{
-		InitializeComponent();
-		
 		BindingContext = _writerStoriesViewModel = writerStoriesViewModel;
+		
+		InitializeComponent();
 	}
 
 	private async void StorySelected(object sender, SelectionChangedEventArgs e)
@@ -25,5 +25,10 @@ public partial class WriterStoriesPage : ContentPage
 		collectionView.SelectedItem = null;
 	
 		await Navigation.PushAsync(new StoryInfoPage(selectedStory));
+	}
+	
+	private async void AddStoryButtonClicked(object sender, EventArgs e)
+	{
+		await Navigation.PushAsync(new AddStoryPage(new AddStoryViewModel(_writerStoriesViewModel.GetWriter(), new ApplicationDbContext())));
 	}
 }

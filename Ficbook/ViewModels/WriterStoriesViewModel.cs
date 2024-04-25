@@ -14,17 +14,29 @@ public partial class WriterStoriesViewModel : ObservableObject
     [ObservableProperty]
     private List<Story> _publishedStories;
 
-    //private IDbServices _dbService;
+    [ObservableProperty] private bool _isRefreshing;
 
     private ApplicationDbContext _dbContext;
 
-    public WriterStoriesViewModel(Writer writer, ApplicationDbContext dbContext)
+    public WriterStoriesViewModel(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
-        Writer = writer;
-        //_dbService = new SQLiteService();
-
-        //PublishedStories = _dbContext.Stories.Where(story => story.Writer == Writer).ToList();
+        Writer = App.UserInfo;
         PublishedStories = _dbContext.Stories.Where(story => story.WriterId == Writer.Id).ToList();
+    }
+    
+    [RelayCommand]
+    private void Refresh()
+    {
+        IsRefreshing = true;
+        
+        PublishedStories = _dbContext.Stories.Where(story => story.WriterId == Writer.Id).ToList();
+        
+        IsRefreshing = false;
+    }
+    
+    public Writer GetWriter()
+    {
+        return Writer;
     }
 }
