@@ -2,11 +2,17 @@
 <ContentPage
     Shell.NavBarIsVisible="False"
     x:Class="Ficbook.Views.MainPage"
+    x:DataType="viewModels:MainViewModel"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:entities="clr-namespace:Ficbook.ModelsEF"
+    xmlns:viewModels="clr-namespace:Ficbook.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
     <StackLayout>
-        <Frame HeightRequest="60" Padding="0,0,3,7">
+        <Frame
+            HeightRequest="60"
+            Margin="3,3,3,3"
+            Padding="0,0,3,7">
             <SearchBar
                 CancelButtonColor="Black"
                 Margin="3,3,3,3"
@@ -20,12 +26,9 @@
                     <StackLayout Margin="5,5,5,5">
                         <Label FontSize="Title" Text="Genres" />
                         <ScrollView Orientation="Horizontal">
-                            <CollectionView
-                                ItemsLayout="HorizontalList"
-                                ItemsSource="{Binding Genres}"
-                                SelectionMode="Single">
+                            <CollectionView ItemsLayout="HorizontalList" ItemsSource="{Binding Genres}">
                                 <CollectionView.ItemTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate x:DataType="entities:Genre">
                                         <StackLayout
                                             Margin="0,3,3,3"
                                             Orientation="Horizontal"
@@ -47,30 +50,32 @@
                     <StackLayout IsVisible="{Binding FavouriteStoriesStatus}" Margin="5,5,5,5">
                         <Label FontSize="Title" Text="Favourite stories" />
                         <ScrollView Orientation="Horizontal">
-                            <CollectionView
-                                ItemsLayout="HorizontalList"
-                                ItemsSource="{Binding FavouriteStories}"
-                                SelectionChanged="StorySelected"
-                                SelectionMode="Single">
+                            <CollectionView ItemsLayout="HorizontalList" ItemsSource="{Binding FavouriteStories}">
                                 <CollectionView.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackLayout
-                                            HeightRequest="180"
-                                            Margin="0,3,3,3"
-                                            Padding="2,2,2,2"
-                                            WidthRequest="100">
-                                            <Frame
-                                                CornerRadius="20"
-                                                HeightRequest="160"
-                                                Padding="0,0,0,0"
+                                    <DataTemplate x:DataType="entities:Story">
+                                        <Border>
+                                            <Border.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=StorySelectedCommand}" CommandParameter="{Binding}" />
+                                            </Border.GestureRecognizers>
+                                            <StackLayout
+                                                HeightRequest="180"
+                                                Margin="0,3,3,3"
+                                                Padding="2,2,2,2"
                                                 WidthRequest="100">
-                                                <Image
+                                                <Frame
+                                                    CornerRadius="20"
                                                     HeightRequest="160"
-                                                    Source="Ficbook/Resources/Images/story.png"
-                                                    WidthRequest="110" />
-                                            </Frame>
-                                            <Label Text="{Binding Title}" />
-                                        </StackLayout>
+                                                    Padding="0,0,0,0"
+                                                    WidthRequest="100">
+                                                    <Image
+                                                        Aspect="AspectFill"
+                                                        HeightRequest="160"
+                                                        Source="{Binding ImageSource}"
+                                                        WidthRequest="110" />
+                                                </Frame>
+                                                <Label Text="{Binding Title}" />
+                                            </StackLayout>
+                                        </Border>
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                             </CollectionView>
@@ -79,33 +84,40 @@
 
                     <StackLayout>
                         <Label FontSize="Title" Text="Stories from other authors" />
-                        <CollectionView
-                            ItemsSource="{Binding AllWritersStories}"
-                            SelectionChanged="StorySelected"
-                            SelectionMode="Single">
+                        <CollectionView ItemsSource="{Binding AllWritersStories}">
                             <CollectionView.ItemsLayout>
-                                <GridItemsLayout Orientation="Vertical" Span="2" />
+                                <GridItemsLayout
+                                    HorizontalItemSpacing="0"
+                                    Orientation="Vertical"
+                                    Span="2"
+                                    VerticalItemSpacing="0" />
                             </CollectionView.ItemsLayout>
                             <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackLayout
-                                        HorizontalOptions="FillAndExpand"
-                                        Margin="0,3,3,3"
-                                        Padding="2,2,2,2"
-                                        VerticalOptions="FillAndExpand">
-                                        <Frame
-                                            CornerRadius="20"
-                                            HeightRequest="280"
+                                <DataTemplate x:DataType="entities:Story">
+                                    <Border>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=StorySelectedCommand}" CommandParameter="{Binding}" />
+                                        </Border.GestureRecognizers>
+                                        <StackLayout
                                             HorizontalOptions="FillAndExpand"
-                                            Padding="0,0,0,0"
+                                            Margin="0,3,3,3"
+                                            Padding="2,2,2,2"
                                             VerticalOptions="FillAndExpand">
-                                            <Image
+                                            <Frame
+                                                CornerRadius="20"
+                                                HeightRequest="280"
                                                 HorizontalOptions="FillAndExpand"
-                                                Source="Ficbook/Resources/Images/story.png"
-                                                VerticalOptions="FillAndExpand" />
-                                        </Frame>
-                                        <Label Text="{Binding Title}" />
-                                    </StackLayout>
+                                                Padding="0,0,0,0"
+                                                VerticalOptions="FillAndExpand">
+                                                <Image
+                                                    Aspect="AspectFill"
+                                                    HorizontalOptions="FillAndExpand"
+                                                    Source="{Binding ImageSource}"
+                                                    VerticalOptions="FillAndExpand" />
+                                            </Frame>
+                                            <Label Text="{Binding Title}" />
+                                        </StackLayout>
+                                    </Border>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>

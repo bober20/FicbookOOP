@@ -16,24 +16,39 @@
         Route="RegistrationPage"
         Title="Registration" />
 
-    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" Route="AuthorPage">
-        <ShellContent
-            ContentTemplate="{DataTemplate views:MainPage}"
-            Route="Home"
-            Title="Home" />
-        <ShellContent
-            ContentTemplate="{DataTemplate views:WriterStoriesPage}"
-            Route="Stories"
-            Title="My stories" />
-        <ShellContent
-            ContentTemplate="{DataTemplate views:NotificationsPage}"
-            Route="Notifications"
-            Title="Notifications" />
-        <ShellContent
-            ContentTemplate="{DataTemplate views:WriterProfilePage}"
-            Route="Profile"
-            Title="Profile" />
-    </FlyoutItem>
+    <!-- <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" Route="AuthorPage"> -->
+    <!--  <ShellContent  -->
+    <!--  ContentTemplate="{DataTemplate views:MainPage}"  -->
+    <!--  Route="Home"  -->
+    <!--  Title="Home" />  -->
+    <!--  <ShellContent  -->
+    <!--  ContentTemplate="{DataTemplate views:WriterStoriesPage}"  -->
+    <!--  Route="Stories"  -->
+    <!--  Title="My stories" />  -->
+    <!--  <ShellContent  -->
+    <!--  ContentTemplate="{DataTemplate views:NotificationsPage}"  -->
+    <!--  Route="Notifications"  -->
+    <!--  Title="Notifications" />  -->
+    <!--  <ShellContent  -->
+    <!--  ContentTemplate="{DataTemplate views:WriterProfilePage}"  -->
+    <!--  Route="Profile"  -->
+    <!--  Title="Profile" />  -->
+    <!-- </FlyoutItem> -->
+
+    <TabBar Route="AuthorPage">
+        <Tab Icon="home_icon.svg" Title="Home">
+            <ShellContent ContentTemplate="{DataTemplate views:MainPage}" Route="Home" />
+        </Tab>
+        <Tab Icon="bookshelf_icon.svg" Title="My stories">
+            <ShellContent ContentTemplate="{DataTemplate views:WriterStoriesPage}" Route="Stories" />
+        </Tab>
+        <Tab Icon="notifications_icon.svg" Title="Notifications">
+            <ShellContent ContentTemplate="{DataTemplate views:NotificationsPage}" Route="Notifications" />
+        </Tab>
+        <Tab Icon="profile_icon.svg" Title="Profile">
+            <ShellContent ContentTemplate="{DataTemplate views:WriterProfilePage}" Route="Profile" />
+        </Tab>
+    </TabBar>
 
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" Route="AdminPage">
         <ShellContent

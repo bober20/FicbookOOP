@@ -1,31 +1,36 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Ficbook.ModelsEF;
 using Ficbook.Services;
 
 namespace Ficbook.ViewModels;
 
+[QueryProperty(nameof(Writer), nameof(Writer))]
 public partial class AddStoryViewModel : ObservableObject
 {
     [ObservableProperty] private string _title;
     [ObservableProperty] private string _content;
+    [ObservableProperty] private string _imageUrl;
     [ObservableProperty] private Genre _genre;
     [ObservableProperty] private List<Genre> _genres;
     [ObservableProperty] private Writer _writer;
     
     private ApplicationDbContext _dbContext;
 
-    public AddStoryViewModel(Writer writer, ApplicationDbContext dbContext)
+    public AddStoryViewModel(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
         Genres = _dbContext.Genres.ToList();
-        Writer = writer;
         Genre = Genres[0];
     }
     
+    [RelayCommand]
     public async void AddStory()
     {
         if (!string.IsNullOrWhiteSpace(Title) ||
-            !string.IsNullOrWhiteSpace(Content))
+            !string.IsNullOrWhiteSpace(Content) ||
+            !string.IsNullOrWhiteSpace(ImageUrl))
+            
         {
             Story newStory = new Story
             {
@@ -33,16 +38,22 @@ public partial class AddStoryViewModel : ObservableObject
                 Content = Content,
                 WriterId = Writer.Id,
                 ShowId = 1,
-                GenreId = Genre.Id
+                GenreId = Genre.Id,
+                ImageSource = ImageUrl
             };
 
             await _dbContext.AddAsync(newStory);
             await _dbContext.SaveChangesAsync();
-            
+
+            await Shell.Current.Navigation.PopAsync();
             return;
         }
         
-        await App.Current.MainPage.DisplayAlert("Story wasn't added",
-            "Fields are empty. Try again.", "Ok");
+        await App.Current.MainPage.DisplayAlert("Story wasn't added", "Fields are empty. Try again.", "Ok");
     }
+
+    // private async Task GetAllRequiredInformation()
+    // {
+    //     Writer = 
+    // }
 }

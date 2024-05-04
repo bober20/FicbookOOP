@@ -1,4 +1,5 @@
-﻿using Ficbook.Services;
+﻿using CommunityToolkit.Maui;
+using Ficbook.Services;
 using Microsoft.Extensions.Logging;
 using Ficbook.ViewModels;
 using Ficbook.Views;
@@ -13,6 +14,7 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
+			.UseMauiCommunityToolkit()
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

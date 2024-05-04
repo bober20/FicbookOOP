@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Ficbook.Services;
 using Ficbook.ModelsEF;
+using Ficbook.Views;
 
 namespace Ficbook.ViewModels;
 
@@ -34,6 +35,7 @@ public partial class MainViewModel : ObservableObject
         var storiesIds = _dbContext.StoriesToReadLater
             .Where(item => item.WriterId == App.UserInfo.Id)
             .Select(item => item.StoryId).ToList();
+        
         FavouriteStories = _dbContext.Stories.Where(story => storiesIds.Contains(story.Id)).ToList();
     }
 
@@ -66,5 +68,16 @@ public partial class MainViewModel : ObservableObject
         
         AllWritersStories = AllWritersStories.Where(story => story.Title.Contains(SearchText)).ToList();
         FavouriteStories = FavouriteStories.Where(story => story.Title.Contains(SearchText)).ToList();
+    }
+    
+    [RelayCommand]
+    private async Task StorySelected(Story story)
+    {
+        IDictionary<string, object> parameters = new Dictionary<string, object>
+        {
+            { "Story", story }
+        };
+        
+        await Shell.Current.GoToAsync(nameof(StoryInfoPage), parameters);
     }
 }

@@ -5,10 +5,15 @@
     x:Class="Ficbook.Views.AddStoryPage"
     x:DataType="viewModels:AddStoryViewModel"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:entities="clr-namespace:Ficbook.ModelsEF"
     xmlns:viewModels="clr-namespace:Ficbook.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     <StackLayout>
         <Entry Placeholder="Enter story title..." Text="{Binding Title}" />
+        <Editor
+            HeightRequest="70"
+            Placeholder="Enter image url..."
+            Text="{Binding ImageUrl}" />
         <Editor
             HeightRequest="300"
             Placeholder="Enter story content..."
@@ -20,7 +25,7 @@
             Title="Select story genre..." />
         <Button
             BackgroundColor="Black"
-            Clicked="AddStoryButtonClicked"
+            Command="{Binding AddStoryCommand}"
             Text="Add Story" />
     </StackLayout>
 </ContentPage>

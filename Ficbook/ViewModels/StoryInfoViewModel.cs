@@ -6,77 +6,76 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ficbook.ViewModels;
 
-public partial class StoryInfoViewModel : ObservableObject
+[QueryProperty("Story", "Story")]
+public partial class StoryInfoViewModel(ApplicationDbContext dbContext) : ObservableObject
 {
-    [ObservableProperty] private Story _selectedStory;
+    [ObservableProperty] private Story _story;
     [ObservableProperty] private Genre _genre;
     [ObservableProperty] private Show _show;
     [ObservableProperty] private Writer _writer;
     [ObservableProperty] private List<Comment> _comments;
     [ObservableProperty] private string _commentContent;
     [ObservableProperty] private bool _removeButtonStatus;
-    
-    private ApplicationDbContext _dbContext;
 
-    public StoryInfoViewModel(Story selectedStory, ApplicationDbContext dbContext)
-    {
-        _dbContext = dbContext;
-        SelectedStory = selectedStory;
-        Genre = _dbContext.Genres.Find(SelectedStory.GenreId);
-        Show = _dbContext.Shows.Find(SelectedStory.ShowId);
-        Writer = _dbContext.Writers.Find(SelectedStory.WriterId);
-        Comments = _dbContext.Comments.Where(story => story.StoryId == SelectedStory.Id).ToList();
-
-        RemoveButtonStatus = SelectedStory.WriterId == App.UserInfo.Id;
-    }
-    
-    public async void RemoveStory()
+    [RelayCommand]
+    private async Task RemoveStory()
     {
         foreach (var comment in Comments)
         {
-            _dbContext.Comments.Remove(comment);
+            dbContext.Comments.Remove(comment);
         }
 
-        var favouriteStories = _dbContext.StoriesToReadLater
-            .Where(story => story.StoryId == SelectedStory.Id);
+        var favouriteStories = dbContext.StoriesToReadLater
+            .Where(story => story.StoryId == Story.Id);
 
         foreach (var fs in favouriteStories)
         {
-            _dbContext.Remove(fs);
+            dbContext.Remove(fs);
         }
 
-        _dbContext.Remove(SelectedStory);
-        await _dbContext.SaveChangesAsync();
+        dbContext.Remove(Story);
+        await dbContext.SaveChangesAsync();
+
+        await Shell.Current.Navigation.PopAsync();
     }
 
     [RelayCommand]
-    private async void AddComment()
+    private async Task AddComment()
     {
-        await _dbContext.AddAsync(new Comment
+        await dbContext.AddAsync(new Comment
         {
             Content = CommentContent,
-            StoryId = SelectedStory.Id,
+            StoryId = Story.Id,
             WriterId = Writer.Id
         });
 
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
 
-        Comments = _dbContext.Comments.Where(story => story.StoryId == SelectedStory.Id).ToList();
+        Comments = dbContext.Comments.Where(story => story.StoryId == Story.Id).ToList();
     }
 
     [RelayCommand]
-    private async void AddStoryToFavourite()
+    private async Task AddStoryToFavourite()
     {
-        await _dbContext.StoriesToReadLater.AddAsync(new StoriesToReadLater
+        await dbContext.StoriesToReadLater.AddAsync(new StoriesToReadLater
         {
-            StoryId = SelectedStory.Id,
+            StoryId = Story.Id,
             WriterId = App.UserInfo.Id
         });
         
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
         
-        await App.Current.MainPage.DisplayAlert("Favourite story",
-            "Story was added to favourite.", "Ok");
+        await App.Current.MainPage.DisplayAlert("Favourite story", "Story was added to favourite.", "Ok");
+    }
 
+    [RelayCommand]
+    private async Task GetAllRequiredInformation()
+    {
+        Genre = (await dbContext.Genres.FindAsync(Story.GenreId))!;
+        Show = (await dbContext.Shows.FindAsync(Story.ShowId))!;
+        Writer = (await dbContext.Writers.FindAsync(Story.WriterId))!;
+        Comments = dbContext.Comments.Where(story => story.StoryId == Story.Id).ToList();
+
+        RemoveButtonStatus = Story.WriterId == App.UserInfo.Id;
     }
 }

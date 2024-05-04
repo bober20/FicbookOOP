@@ -11,6 +11,7 @@ public class Story
     public int GenreId { get; set; }
     public int ShowId { get; set; }
     public int WriterId { get; set; }
+    public string ImageSource { get; set; }
     //navigation properties
     // public Writer Writer { get; set; }
     // public Genre Genre { get; set; }

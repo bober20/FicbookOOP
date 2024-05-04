@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
 <ContentPage
-    Title="{Binding SelectedStory.Title}"
+    Title="{Binding Story.Title}"
     x:Class="Ficbook.Views.StoryInfoPage"
+    x:DataType="viewModels:StoryInfoViewModel"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:entities="clr-namespace:Ficbook.ModelsEF"
+    xmlns:tololkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewModels="clr-namespace:Ficbook.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <ContentPage.Behaviors>
+        <tololkit:EventToCommandBehavior Command="{Binding GetAllRequiredInformationCommand}" EventName="Loaded" />
+    </ContentPage.Behaviors>
+
     <ScrollView>
         <StackLayout>
             <Frame
@@ -13,19 +22,20 @@
                 HorizontalOptions="FillAndExpand"
                 VerticalOptions="FillAndExpand"
                 WidthRequest="400">
+
                 <Image
                     Aspect="AspectFill"
                     HeightRequest="400"
-                    Source="Ficbook/Resources/Images/author3.jpg"
+                    Source="{Binding Story.ImageSource}"
                     WidthRequest="400" />
             </Frame>
             <Label
                 FontSize="25"
                 HorizontalTextAlignment="Start"
-                Text="{Binding SelectedStory.Title}">
+                Text="{Binding Story.Title}">
                 <Label.FormattedText>
                     <FormattedString>
-                        <Span Text="{Binding SelectedStory.Title}" />
+                        <Span Text="{Binding Story.Title}" />
                     </FormattedString>
                 </Label.FormattedText>
             </Label>
@@ -53,10 +63,10 @@
                     </FormattedString>
                 </Label.FormattedText>
             </Label>
-            <Label Text="{Binding SelectedStory.Content}" />
+            <Label Text="{Binding Story.Content}" />
             <Button
                 BackgroundColor="Black"
-                Clicked="RemoveStoryButtonClicked"
+                Command="{Binding RemoveStoryCommand}"
                 IsVisible="{Binding RemoveButtonStatus}"
                 Margin="3,3,3,3"
                 Text="Remove story" />
@@ -73,11 +83,10 @@
                 Text="Add comment" />
             <CollectionView ItemsSource="{Binding Comments}">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="entities:Comment">
                         <Frame Margin="3,3,3,3" Padding="3,3,3,3">
                             <StackLayout>
                                 <Label Text="{Binding Content}" />
-                                <!-- <Label Text="{Binding }" /> -->
                             </StackLayout>
                         </Frame>
                     </DataTemplate>

@@ -14,14 +14,12 @@ public partial class RegistrationViewModel : ObservableObject
     [ObservableProperty] private string _passwordConfirmation;
     
     [ObservableProperty] private List<Writer> _writers;
-    private Admin _admin;
     private ApplicationDbContext _dbContext;
     
     public RegistrationViewModel(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
         Writers = _dbContext.Writers.ToList();
-        _admin = dbContext.Admin.First();
     }
 
     [RelayCommand]
@@ -65,8 +63,7 @@ public partial class RegistrationViewModel : ObservableObject
         }
         else
         {
-            await App.Current.MainPage.DisplayAlert("Authentication",
-                "Fields are empty.", "Ok");
+            await App.Current.MainPage.DisplayAlert("Authentication", "Fields are empty.", "Ok");
         }
     }
 

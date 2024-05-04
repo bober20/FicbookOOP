@@ -15,20 +15,20 @@ public partial class WriterStoriesPage : ContentPage
 		InitializeComponent();
 	}
 
-	private async void StorySelected(object sender, SelectionChangedEventArgs e)
-	{
-		var collectionView = sender as CollectionView;
-
-		if (collectionView?.SelectedItem is null) return;
-		Story? selectedStory = collectionView.SelectedItem as Story;
-	
-		collectionView.SelectedItem = null;
-	
-		await Navigation.PushAsync(new StoryInfoPage(selectedStory));
-	}
-	
-	private async void AddStoryButtonClicked(object sender, EventArgs e)
-	{
-		await Navigation.PushAsync(new AddStoryPage(new AddStoryViewModel(_writerStoriesViewModel.GetWriter(), new ApplicationDbContext())));
-	}
+	// private async void StorySelected(object sender, SelectionChangedEventArgs e)
+	// {
+	// 	var collectionView = sender as CollectionView;
+	//
+	// 	if (collectionView?.SelectedItem is null) return;
+	// 	Story? selectedStory = collectionView.SelectedItem as Story;
+	//
+	// 	collectionView.SelectedItem = null;
+	//
+	// 	await Navigation.PushAsync(new StoryInfoPage(selectedStory));
+	// }
+	//
+	// private async void AddStoryButtonClicked(object sender, EventArgs e)
+	// {
+	// 	await Navigation.PushAsync(new AddStoryPage(new AddStoryViewModel(_writerStoriesViewModel.GetWriter(), new ApplicationDbContext())));
+	// }
 }

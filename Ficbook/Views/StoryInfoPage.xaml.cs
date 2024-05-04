@@ -8,25 +8,25 @@ public partial class StoryInfoPage : ContentPage
 {
     private StoryInfoViewModel _storyInfoViewModel;
     
-    public StoryInfoPage(Story selectedStory)
+    public StoryInfoPage(StoryInfoViewModel storyInfoViewModel)
     {
-        BindingContext = _storyInfoViewModel = new StoryInfoViewModel(selectedStory, new ApplicationDbContext());
+        BindingContext = storyInfoViewModel;
         
         InitializeComponent();
     }
 
-    private async void RemoveStoryButtonClicked(object sender, EventArgs e)
-    {
-        _storyInfoViewModel.RemoveStory();
-        var pagesStack = Shell.Current.Navigation.NavigationStack.ToArray();
-        foreach (var item in pagesStack)
-        {
-            if (item is WriterStoriesPage)
-            {
-                Navigation.RemovePage(item);
-            }
-        }
-        
-        await Navigation.PopAsync();
-    }
+    // private async void RemoveStoryButtonClicked(object sender, EventArgs e)
+    // {
+    //     _storyInfoViewModel.RemoveStory();
+    //     var pagesStack = Shell.Current.Navigation.NavigationStack.ToArray();
+    //     foreach (var item in pagesStack)
+    //     {
+    //         if (item is WriterStoriesPage)
+    //         {
+    //             Navigation.RemovePage(item);
+    //         }
+    //     }
+    //     
+    //     await Navigation.PopAsync();
+    // }
 }

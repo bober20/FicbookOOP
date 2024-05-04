@@ -1,44 +1,53 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    Title="{Binding Writer.Name}"
+    Shell.NavBarIsVisible="False"
     x:Class="Ficbook.Views.WriterStoriesPage"
+    x:DataType="viewModels:WriterStoriesViewModel"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:entities="clr-namespace:Ficbook.ModelsEF"
+    xmlns:viewModels="clr-namespace:Ficbook.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     <StackLayout>
         <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
             <ScrollView>
-                <StackLayout>
-                    <CollectionView
-                        ItemsSource="{Binding PublishedStories}"
-                        SelectionChanged="StorySelected"
-                        SelectionMode="Single">
+                <StackLayout Spacing="0">
+                    <CollectionView ItemsSource="{Binding PublishedStories}">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout ItemSpacing="0" Orientation="Vertical" />
+                        </CollectionView.ItemsLayout>
                         <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid
-                                    BackgroundColor="Transparent"
-                                    ColumnDefinitions="3*, 7*"
-                                    HeightRequest="210">
-                                    <Border HeightRequest="180" StrokeShape="RoundRectangle 20">
-                                        <Image Source="Ficbook/Resources/Images/story.png" />
-                                    </Border>
+                            <DataTemplate x:DataType="entities:Story">
+                                <Border>
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:WriterStoriesViewModel}}, Path=StorySelectedCommand}" CommandParameter="{Binding}" />
+                                    </Border.GestureRecognizers>
+                                    <Grid
+                                        BackgroundColor="Transparent"
+                                        ColumnDefinitions="3*, 7*"
+                                        HeightRequest="210">
 
-                                    <StackLayout
-                                        Grid.Column="1"
-                                        Margin="8"
-                                        Orientation="Vertical">
-                                        <Label
-                                            FontAttributes="Bold"
-                                            FontSize="20"
-                                            Text="{Binding Title}"
-                                            TextColor="Black" />
-                                        <Label
-                                            FontSize="14"
-                                            HorizontalTextAlignment="Start"
-                                            MaxLines="6"
-                                            Text="{Binding Content}"
-                                            TextColor="Black" />
-                                    </StackLayout>
-                                </Grid>
+                                        <Border HeightRequest="180" StrokeShape="RoundRectangle 20">
+                                            <Image Aspect="AspectFill" Source="{Binding ImageSource}" />
+                                        </Border>
+
+                                        <StackLayout
+                                            Grid.Column="1"
+                                            Margin="8"
+                                            Orientation="Vertical">
+                                            <Label
+                                                FontAttributes="Bold"
+                                                FontSize="20"
+                                                Text="{Binding Title}"
+                                                TextColor="Black" />
+                                            <Label
+                                                FontSize="14"
+                                                HorizontalTextAlignment="Start"
+                                                MaxLines="6"
+                                                Text="{Binding Content}"
+                                                TextColor="Black" />
+                                        </StackLayout>
+                                    </Grid>
+                                </Border>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
@@ -47,7 +56,7 @@
         </RefreshView>
         <Button
             BackgroundColor="Black"
-            Clicked="AddStoryButtonClicked"
+            Command="{Binding AddStoryCommand}"
             Margin="3,3,3,3"
             Text="Add story" />
     </StackLayout>

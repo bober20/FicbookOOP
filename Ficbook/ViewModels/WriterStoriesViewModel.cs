@@ -1,22 +1,20 @@
+using System.Collections;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Ficbook.ModelsEF;
 using Ficbook.Services;
+using Ficbook.Views;
 
 namespace Ficbook.ViewModels;
 
 public partial class WriterStoriesViewModel : ObservableObject
 {
-    [ObservableProperty]
-    private Writer _writer;
-    
-    [ObservableProperty]
-    private List<Story> _publishedStories;
-
+    [ObservableProperty] private Writer _writer;
+    [ObservableProperty] private List<Story> _publishedStories;
     [ObservableProperty] private bool _isRefreshing;
 
-    private ApplicationDbContext _dbContext;
+    private readonly ApplicationDbContext _dbContext;
 
     public WriterStoriesViewModel(ApplicationDbContext dbContext)
     {
@@ -34,9 +32,31 @@ public partial class WriterStoriesViewModel : ObservableObject
         
         IsRefreshing = false;
     }
-    
-    public Writer GetWriter()
+
+    [RelayCommand]
+    private async Task StorySelected(Story story)
     {
-        return Writer;
+        IDictionary<string, object> parameters = new Dictionary<string, object>
+        {
+            { "Story", story }
+        };
+        
+        await Shell.Current.GoToAsync(nameof(StoryInfoPage), parameters);
     }
+
+    [RelayCommand]
+    private async Task AddStory()
+    {
+        IDictionary<string, object> parameters = new Dictionary<string, object>
+        {
+            {"Writer", Writer}
+        };
+        
+        await Shell.Current.GoToAsync(nameof(AddStoryPage), parameters);
+    }
+    
+    // public Writer GetWriter()
+    // {
+    //     return Writer;
+    // }
 }

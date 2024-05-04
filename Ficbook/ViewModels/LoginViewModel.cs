@@ -9,11 +9,9 @@ namespace Ficbook.ViewModels;
 
 public partial class LoginViewModel : ObservableObject
 {
-    [ObservableProperty]
-    private string _username;
+    [ObservableProperty] private string _username;
     
-    [ObservableProperty]
-    private string _password;
+    [ObservableProperty] private string _password;
 
     private List<Writer> _writers;
     private Admin _admin;

@@ -17,7 +17,7 @@ public sealed class ApplicationDbContext : DbContext
 
     public ApplicationDbContext()
     {
-        // Database.EnsureDeleted();
+        Database.EnsureDeleted();
         Database.EnsureCreated();
     }
     
@@ -84,7 +84,8 @@ public sealed class ApplicationDbContext : DbContext
                                                                         "Sanctuary and vice versa. Everything is good " +
                                                                         "until…Rick's daughter forms a relationship with a guy " +
                                                                         "she meets on the outside, who happens to be a savior. " +
-                                                                        "Another Abby spin-off.", WriterId = 1, ShowId = 1, GenreId = 2 },
+                                                                        "Another Abby spin-off.", 
+                WriterId = 1, ShowId = 1, GenreId = 2, ImageSource = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3eraADCg860k7mSlT-douktUWad5xmXm8Hgy5ZF97OQ&s"},
             new Story { Id = 2, Title = "Just come home", Content = "Josey Kowalski & Grandfather Walt never fit into the white " +
                                                             "picket fence paradise Alexandria " +
                                                             "was once sold as. Despite initial differences, " +
@@ -93,7 +94,8 @@ public sealed class ApplicationDbContext : DbContext
                                                             "Josey returns to Alexandria & things aren't as clear " +
                                                             "cut as before as she reunites with Daryl " +
                                                             "& the others ..." +
-                                                            "for publication in another journal.", WriterId = 2, ShowId = 1, GenreId = 8 },
+                                                            "for publication in another journal.",
+                WriterId = 2, ShowId = 1, GenreId = 8, ImageSource = "https://m.media-amazon.com/images/I/71AJoBx3oDL._AC_UF894,1000_QL80_.jpg"},
             new Story { Id = 3, Title = "From hell with love", Content = "She's already used to signing like this. " +
                                                                          "Although everyone just calls her Helly. " +
                                                                          "But damn, it sounds so American. She didn't like it. Not even that," +
@@ -104,13 +106,14 @@ public sealed class ApplicationDbContext : DbContext
                                                                          "the name is spelled with one letter “l”), so everyone " +
                                                                          "calls her Helly ( because “Damn”** sounds offensive, " +
                                                                          "and in the USA you have to be very careful with insults lately). " +
-                                                                         "The girl has to endure this every day.", WriterId = 1, ShowId = 2, GenreId = 8 },
+                                                                         "The girl has to endure this every day.", 
+                WriterId = 1, ShowId = 2, GenreId = 8, ImageSource = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSojYhf7F5A9BvDALPcVbt59_heJZIHFK124BpcOXZeZA&s"},
             new Story { Id = 4, Title = "Close Encounters of the Hot Priest Kind", Content = "My morning goes by quite calmly, but by lunchtime, " +
                     "right in the hustle and bustle of work, " +
                     "the largest bouquet of flowers that " +
                     "I have ever been given arrived. " +
                     "The card simply says, \"Happy Birthday.\""
-                , WriterId = 2, ShowId = 2, GenreId = 2 }
+                , WriterId = 2, ShowId = 2, GenreId = 2, ImageSource = "https://blob.cede.ch/catalog/16673000/16673742_1_92.jpg?v=1"}
         );
     }
 }
