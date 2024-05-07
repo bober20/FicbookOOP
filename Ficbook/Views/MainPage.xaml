@@ -39,6 +39,9 @@
                                                 Padding="0,2,0,0"
                                                 WidthRequest="120">
                                                 <Label HorizontalOptions="Center" Text="{Binding Name}" />
+                                                <Frame.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=GetStoriesByGenreCommand}" CommandParameter="{Binding}" />
+                                                </Frame.GestureRecognizers>
                                             </Frame>
                                         </StackLayout>
                                     </DataTemplate>

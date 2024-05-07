@@ -80,4 +80,14 @@ public partial class MainViewModel : ObservableObject
         
         await Shell.Current.GoToAsync(nameof(StoryInfoPage), parameters);
     }
+
+    [RelayCommand]
+    private async Task GetStoriesByGenre(Genre genre)
+    {
+        GetAllStories();
+        GetFavouriteStories();
+        
+        AllWritersStories = AllWritersStories.Where(story => story.GenreId == genre.Id).ToList();
+        FavouriteStories = FavouriteStories.Where(story => story.GenreId == genre.Id).ToList();
+    }
 }
