@@ -10,13 +10,10 @@ namespace Ficbook.Views;
 
 public partial class RegistrationPage : ContentPage
 {
-    private RegistrationViewModel _registrationViewModel;
-    
     public RegistrationPage(RegistrationViewModel registrationViewModel)
     {
-        BindingContext = _registrationViewModel = registrationViewModel;
+        BindingContext = registrationViewModel;
         
         InitializeComponent();
     }
-
 }

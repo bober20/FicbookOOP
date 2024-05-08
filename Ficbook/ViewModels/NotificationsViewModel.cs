@@ -5,12 +5,13 @@ using Ficbook.Services;
 
 namespace Ficbook.ViewModels;
 
+// [QueryProperty("_writer", "Writer")]
 public partial class NotificationsViewModel : ObservableObject
 {
     [ObservableProperty] private List<Notification> _notifications;
     [ObservableProperty] private bool _isRefreshing;
     [ObservableProperty] private bool _isNotificationsEmpty = true;
-
+    
     private Writer _writer;
 
     private ApplicationDbContext _dbContext;
@@ -18,8 +19,14 @@ public partial class NotificationsViewModel : ObservableObject
     public NotificationsViewModel(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
+    }
+
+    [RelayCommand]
+    private void GetNotificationsInfo()
+    {
         _writer = App.UserInfo;
-        _notifications = _dbContext.Notifications.Where(notification => notification.WriterId == _writer.Id).ToList();
+        
+        Notifications = _dbContext.Notifications.Where(notification => notification.WriterId == _writer.Id).ToList();
 
         if (Notifications.Count > 0)
         {

@@ -12,19 +12,17 @@ namespace Ficbook.Views;
 
 public partial class AdminPage : ContentPage
 {
-    private AdminViewModel _adminViewModel;
-    
     public AdminPage(AdminViewModel adminViewModel)
     {
-        BindingContext = _adminViewModel = adminViewModel;
+        BindingContext = adminViewModel;
         
         InitializeComponent();
     }
     
-    private void SearchBarTextChanged(object? sender, TextChangedEventArgs e)
-    {
-        _adminViewModel.Search();
-    }
+    // private void SearchBarTextChanged(object? sender, TextChangedEventArgs e)
+    // {
+    //     _adminViewModel.Search();
+    // }
 
     // private void SelectableItemsView_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     // {

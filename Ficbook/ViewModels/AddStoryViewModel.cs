@@ -20,12 +20,10 @@ public partial class AddStoryViewModel : ObservableObject
     public AddStoryViewModel(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
-        Genres = _dbContext.Genres.ToList();
-        Genre = Genres[0];
     }
     
     [RelayCommand]
-    public async void AddStory()
+    private async Task AddStory()
     {
         if (!string.IsNullOrWhiteSpace(Title) ||
             !string.IsNullOrWhiteSpace(Content) ||
@@ -44,7 +42,8 @@ public partial class AddStoryViewModel : ObservableObject
 
             await _dbContext.AddAsync(newStory);
             await _dbContext.SaveChangesAsync();
-
+            
+            await App.Current.MainPage.DisplayAlert("Story info", "Story was successfully added.", "Ok");
             await Shell.Current.Navigation.PopAsync();
             return;
         }
@@ -52,8 +51,10 @@ public partial class AddStoryViewModel : ObservableObject
         await App.Current.MainPage.DisplayAlert("Story wasn't added", "Fields are empty. Try again.", "Ok");
     }
 
-    // private async Task GetAllRequiredInformation()
-    // {
-    //     Writer = 
-    // }
+    [RelayCommand]
+    private void GetAllRequiredInformation()
+    {
+        Genres = _dbContext.Genres.ToList();
+        Genre = Genres[0];
+    }
 }

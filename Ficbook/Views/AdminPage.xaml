@@ -9,8 +9,7 @@
             <SearchBar
                 CancelButtonColor="Black"
                 Placeholder="Search author..."
-                Text="{Binding SearchText}"
-                TextChanged="SearchBarTextChanged" />
+                Text="{Binding SearchText}" />
         </Frame>
         <ScrollView Orientation="Horizontal">
             <StackLayout Margin="5,5,5,5">

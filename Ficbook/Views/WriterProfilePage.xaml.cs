@@ -5,12 +5,10 @@ namespace Ficbook.Views;
 
 public partial class WriterProfilePage : ContentPage
 {
-    private WriterProfileViewModel _writerProfileViewModel;
-
     public WriterProfilePage(WriterProfileViewModel writerProfileViewModel)
     {
+        BindingContext = writerProfileViewModel;
+        
         InitializeComponent();
-
-        BindingContext = _writerProfileViewModel = writerProfileViewModel;
     }
 }

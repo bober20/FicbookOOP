@@ -10,11 +10,9 @@ namespace Ficbook.Views;
 
 public partial class LoginPage : ContentPage
 {
-    private LoginViewModel _loginView;
-    
-    public LoginPage()
+    public LoginPage(LoginViewModel loginViewModel)
     {
-        BindingContext = _loginView = new LoginViewModel(new ApplicationDbContext());
+        BindingContext = loginViewModel;
         
         InitializeComponent();
     }

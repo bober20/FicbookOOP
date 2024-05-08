@@ -11,11 +11,4 @@ public partial class AddStoryPage : ContentPage
         
         InitializeComponent();
     }
-
-    // private void AddStoryButtonClicked(object sender, EventArgs e)
-    // {
-    //     _addStoryViewModel.AddStory();
-    //
-    //     Navigation.PopAsync();
-    // }
 }

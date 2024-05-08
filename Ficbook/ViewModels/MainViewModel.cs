@@ -6,6 +6,7 @@ using Ficbook.Views;
 
 namespace Ficbook.ViewModels;
 
+//[QueryProperty("Writer", "Writer")]
 public partial class MainViewModel : ObservableObject
 {
     [ObservableProperty] private List<Genre> _genres;
@@ -15,6 +16,7 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty] private bool _isRefreshing;
     [ObservableProperty] private string _searchText;
     [ObservableProperty] private bool _favouriteStoriesStatus;
+    [ObservableProperty] private Writer _writer;
     
     private ApplicationDbContext _dbContext;
     
@@ -23,6 +25,12 @@ public partial class MainViewModel : ObservableObject
         _dbContext = dbContext;
         Genres = _dbContext.Genres.ToList();
         Writers = _dbContext.Writers.ToList();
+    }
+
+    [RelayCommand]
+    private void UpdateStoriesCollections()
+    {
+        Writer = App.UserInfo;
         
         GetFavouriteStories();
         GetAllStories();
@@ -30,15 +38,17 @@ public partial class MainViewModel : ObservableObject
         FavouriteStoriesStatus = FavouriteStories.Count != 0;
     }
 
+    
     private void GetFavouriteStories()
     {
         var storiesIds = _dbContext.StoriesToReadLater
-            .Where(item => item.WriterId == App.UserInfo.Id)
+            .Where(item => item.WriterId == Writer.Id)
             .Select(item => item.StoryId).ToList();
         
         FavouriteStories = _dbContext.Stories.Where(story => storiesIds.Contains(story.Id)).ToList();
     }
 
+    [RelayCommand]
     private void GetAllStories()
     {
         var activeWritersIds = _dbContext.Writers.Where(writer => writer.IsBanned == false)
@@ -63,8 +73,7 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     public void Search()
     {
-        GetAllStories();
-        GetFavouriteStories();
+        UpdateStoriesCollections();
         
         AllWritersStories = AllWritersStories.Where(story => story.Title.Contains(SearchText)).ToList();
         FavouriteStories = FavouriteStories.Where(story => story.Title.Contains(SearchText)).ToList();
@@ -84,8 +93,7 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private async Task GetStoriesByGenre(Genre genre)
     {
-        GetAllStories();
-        GetFavouriteStories();
+        UpdateStoriesCollections();
         
         AllWritersStories = AllWritersStories.Where(story => story.GenreId == genre.Id).ToList();
         FavouriteStories = FavouriteStories.Where(story => story.GenreId == genre.Id).ToList();

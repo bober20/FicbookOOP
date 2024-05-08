@@ -35,15 +35,22 @@ public partial class LoginViewModel : ObservableObject
             {
                 if (writer.Name == Username && writer.Password == Password)
                 {
-                    if (Preferences.ContainsKey(nameof(App.UserInfo)))
-                    {
-                        Preferences.Remove(nameof(App.UserInfo));
-                    }
+                     if (Preferences.ContainsKey(nameof(App.UserInfo)))
+                     {
+                         Preferences.Remove(nameof(App.UserInfo));
+                     }
         
-                    string userDetails = JsonConvert.SerializeObject(writer);
-                    Preferences.Set(nameof(App.UserInfo), userDetails);
+                     string userDetails = JsonConvert.SerializeObject(writer);
+                     Preferences.Set(nameof(App.UserInfo), userDetails);
                     App.UserInfo = writer;
-                
+                    
+                    // IDictionary<string, object> parameters = new Dictionary<string, object>()
+                    // {
+                    //     { "Writer", writer }
+                    // };
+                    //
+                    // await Shell.Current.GoToAsync($"//AuthorPage", parameters);
+                    
                     await Shell.Current.GoToAsync($"//AuthorPage");
         
                     return;
@@ -58,8 +65,7 @@ public partial class LoginViewModel : ObservableObject
             return;
         }
         
-        await App.Current.MainPage.DisplayAlert("Authentication",
-                "Invalid username or password.", "Ok");
+        await App.Current.MainPage.DisplayAlert("Authentication", "Invalid username or password.", "Ok");
             
     }
     

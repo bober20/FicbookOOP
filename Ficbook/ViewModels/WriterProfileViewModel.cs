@@ -5,6 +5,7 @@ using Ficbook.Services;
 
 namespace Ficbook.ViewModels;
 
+// [QueryProperty("Writer", "Writer")]
 public partial class WriterProfileViewModel : ObservableObject
 {
     [ObservableProperty]
@@ -13,6 +14,12 @@ public partial class WriterProfileViewModel : ObservableObject
     [ObservableProperty] private bool _isRefreshing;
 
     public WriterProfileViewModel(ApplicationDbContext dbContext)
+    {
+        
+    }
+
+    [RelayCommand]
+    private void GetWriterInfo()
     {
         Writer = App.UserInfo;
     }
@@ -24,7 +31,10 @@ public partial class WriterProfileViewModel : ObservableObject
         {
             Preferences.Remove(nameof(App.UserInfo));
         }
-         
+        
+        //var t = Shell.Current.Tab
+        
+        //Shell.Current.CurrentPage.Navigation.RemovePage(Shell.Current);
         await Shell.Current.GoToAsync($"//LoginPage");
     }
 

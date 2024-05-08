@@ -9,11 +9,9 @@ namespace Ficbook.Views;
 
 public partial class NotificationsPage : ContentPage
 {
-    private NotificationsViewModel _notificationsViewModel;
-    
     public NotificationsPage(NotificationsViewModel notificationsViewModel)
     {
-        BindingContext = _notificationsViewModel = notificationsViewModel;
+        BindingContext = notificationsViewModel;
         
         InitializeComponent();
     }

@@ -8,6 +8,7 @@ using Ficbook.Views;
 
 namespace Ficbook.ViewModels;
 
+[QueryProperty("Writer", "Writer")]
 public partial class WriterStoriesViewModel : ObservableObject
 {
     [ObservableProperty] private Writer _writer;
@@ -19,6 +20,11 @@ public partial class WriterStoriesViewModel : ObservableObject
     public WriterStoriesViewModel(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
+    }
+
+    [RelayCommand]
+    private void GetStoriesInfo()
+    {
         Writer = App.UserInfo;
         PublishedStories = _dbContext.Stories.Where(story => story.WriterId == Writer.Id).ToList();
     }
@@ -54,9 +60,4 @@ public partial class WriterStoriesViewModel : ObservableObject
         
         await Shell.Current.GoToAsync(nameof(AddStoryPage), parameters);
     }
-    
-    // public Writer GetWriter()
-    // {
-    //     return Writer;
-    // }
 }
