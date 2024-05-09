@@ -21,62 +21,79 @@ public partial class MainViewModel(ApplicationDbContext dbContext) : ObservableO
     private readonly ApplicationDbContext _dbContext = dbContext;
     
     [RelayCommand]
-    private void GetAllRequiredInfo()
+    private async Task GetAllRequiredInfo()
     {
-        Genres = _dbContext.Genres.ToList();
-        Writers = _dbContext.Writers.ToList();
-        Shows = _dbContext.Shows.ToList();
-        Writer = App.UserInfo;
-
-        UpdateStoriesCollections();
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            Genres = _dbContext.Genres.ToList();
+            Writers = _dbContext.Writers.ToList();
+            Shows = _dbContext.Shows.ToList();
+            Writer = App.UserInfo;
+        });
+        await UpdateStoriesCollections();
     }
 
-    private void UpdateStoriesCollections()
+    private async Task UpdateStoriesCollections()
     {
-        GetFavouriteStories();
-        GetAllStories();
-        
-        FavouriteStoriesStatus = FavouriteStories.Count != 0;
+        await GetFavouriteStories();
+        await  GetAllStories();
+       
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            FavouriteStoriesStatus = FavouriteStories.Count != 0;
+        });
     }
     
-    private void GetFavouriteStories()
+    private async Task GetFavouriteStories()
     {
-        var storiesIds = _dbContext.StoriesToReadLater
-            .Where(item => item.WriterId == Writer.Id)
-            .Select(item => item.StoryId).ToList();
-        
-        FavouriteStories = _dbContext.Stories.Where(story => storiesIds.Contains(story.Id)).ToList();
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            var storiesIds = _dbContext.StoriesToReadLater
+                .Where(item => item.WriterId == Writer.Id)
+                .Select(item => item.StoryId).ToList();
+
+            FavouriteStories = _dbContext.Stories.Where(story => storiesIds.Contains(story.Id)).ToList();
+        });
     }
 
     [RelayCommand]
-    private void GetAllStories()
+    private async Task GetAllStories()
     {
-        var activeWritersIds = _dbContext.Writers.Where(writer => writer.IsBanned == false)
-            .Select(writer => writer.Id).ToList();
-        AllWritersStories = _dbContext.Stories.Where(story => activeWritersIds.Contains(story.WriterId)).ToList();
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            var activeWritersIds = _dbContext.Writers.Where(writer => writer.IsBanned == false)
+                .Select(writer => writer.Id).ToList();
+            AllWritersStories = _dbContext.Stories.Where(story => activeWritersIds.Contains(story.WriterId)).ToList();
+        });
     }
     
     [RelayCommand]
-    private void Refresh()
+    private async Task Refresh()
     {
         IsRefreshing = true;
+
+        await GetFavouriteStories();
+        await GetAllStories();
         
-        GetFavouriteStories();
-        GetAllStories();
-        
-        Writers = _dbContext.Writers.Where(writer => writer.IsBanned == false).ToList();
-        FavouriteStoriesStatus = FavouriteStories.Count != 0;
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            Writers = _dbContext.Writers.Where(writer => writer.IsBanned == false).ToList();
+            FavouriteStoriesStatus = FavouriteStories.Count != 0;
+        });
         
         IsRefreshing = false;
     }
 
     [RelayCommand]
-    private void Search()
+    private async Task Search()
     {
-        UpdateStoriesCollections();
+        await UpdateStoriesCollections();
         
-        AllWritersStories = AllWritersStories.Where(story => story.Title.Contains(SearchText)).ToList();
-        FavouriteStories = FavouriteStories.Where(story => story.Title.Contains(SearchText)).ToList();
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            AllWritersStories = AllWritersStories.Where(story => story.Title.Contains(SearchText)).ToList();
+            FavouriteStories = FavouriteStories.Where(story => story.Title.Contains(SearchText)).ToList();
+        });
     }
     
     [RelayCommand]
@@ -91,29 +108,38 @@ public partial class MainViewModel(ApplicationDbContext dbContext) : ObservableO
     }
 
     [RelayCommand]
-    private void GetStoriesByGenre(Genre genre)
+    private async Task GetStoriesByGenre(Genre genre)
     {
-        UpdateStoriesCollections();
-        
-        AllWritersStories = AllWritersStories.Where(story => story.GenreId == genre.Id).ToList();
-        FavouriteStories = FavouriteStories.Where(story => story.GenreId == genre.Id).ToList();
+        await UpdateStoriesCollections();
+
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            AllWritersStories = AllWritersStories.Where(story => story.GenreId == genre.Id).ToList();
+            FavouriteStories = FavouriteStories.Where(story => story.GenreId == genre.Id).ToList();
+        });
     }
     
     [RelayCommand]
-    private void GetStoriesByShow(Show show)
+    private async Task GetStoriesByShow(Show show)
     {
-        UpdateStoriesCollections();
-        
-        AllWritersStories = AllWritersStories.Where(story => story.ShowId == show.Id).ToList();
-        FavouriteStories = FavouriteStories.Where(story => story.ShowId == show.Id).ToList();
+        await UpdateStoriesCollections();
+
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            AllWritersStories = AllWritersStories.Where(story => story.ShowId == show.Id).ToList();
+            FavouriteStories = FavouriteStories.Where(story => story.ShowId == show.Id).ToList();
+        });
     }
     
     [RelayCommand]
-    private void GetStoriesByWriter(Writer writer)
+    private async Task GetStoriesByWriter(Writer writer)
     {
-        UpdateStoriesCollections();
-        
-        AllWritersStories = AllWritersStories.Where(story => story.WriterId == writer.Id).ToList();
-        FavouriteStories = FavouriteStories.Where(story => story.WriterId == writer.Id).ToList();
+        await UpdateStoriesCollections();
+
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            AllWritersStories = AllWritersStories.Where(story => story.WriterId == writer.Id).ToList();
+            FavouriteStories = FavouriteStories.Where(story => story.WriterId == writer.Id).ToList();
+        });
     }
 }

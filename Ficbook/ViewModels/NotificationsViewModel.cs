@@ -16,11 +16,15 @@ public partial class NotificationsViewModel(ApplicationDbContext dbContext) : Ob
     private readonly ApplicationDbContext _dbContext = dbContext;
 
     [RelayCommand]
-    private void GetNotificationsInfo()
+    private async Task GetNotificationsInfo()
     {
-        _writer = App.UserInfo;
-        Notifications = _dbContext.Notifications.Where(notification => notification.WriterId == _writer.Id).ToList();
-
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            _writer = App.UserInfo;
+            Notifications = _dbContext.Notifications.Where(notification => notification.WriterId == _writer.Id)
+                .ToList();
+        });
+        
         if (Notifications.Count > 0)
         {
             IsNotificationsEmpty = false;
@@ -28,19 +32,24 @@ public partial class NotificationsViewModel(ApplicationDbContext dbContext) : Ob
     }
     
     [RelayCommand]
-    private void Refresh()
+    private async Task Refresh()
     {
         IsRefreshing = true;
-        Notifications = _dbContext.Notifications.Where(notification => notification.WriterId == _writer.Id).ToList();
-        
-        if (Notifications.Count > 0)
+
+        await MainThread.InvokeOnMainThreadAsync(() =>
         {
-            IsNotificationsEmpty = false;
-            
-            return;
-        }
+            Notifications = _dbContext.Notifications.Where(notification => notification.WriterId == _writer.Id)
+                .ToList();
+
+            if (Notifications.Count > 0)
+            {
+                IsNotificationsEmpty = false;
+
+                return;
+            }
+            IsNotificationsEmpty = true;
+        });
         
-        IsNotificationsEmpty = true;
         IsRefreshing = false;
     }
 }

@@ -18,8 +18,8 @@ public partial class LoginViewModel(ApplicationDbContext dbContext) : Observable
     [RelayCommand]
     private async void Login()
     {
-        _writers = _dbContext.Writers.ToList();
-        
+        await MainThread.InvokeOnMainThreadAsync(() => { _writers = _dbContext.Writers.ToList(); });
+
         if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password))
         {
             foreach (var writer in _writers)
@@ -72,10 +72,13 @@ public partial class LoginViewModel(ApplicationDbContext dbContext) : Observable
     }
     
     [RelayCommand]
-    private void GetRequiredInfo()
+    private async Task GetRequiredInfo()
     {
-        _writers = _dbContext.Writers.ToList();
-        _admin = _dbContext.Admin.First();
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            _writers = _dbContext.Writers.ToList();
+            _admin = _dbContext.Admin.First();
+        });
     }
 }
 

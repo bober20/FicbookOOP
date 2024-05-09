@@ -22,21 +22,27 @@ public partial class StoryInfoViewModel(ApplicationDbContext dbContext) : Observ
     [RelayCommand]
     private async Task RemoveStory()
     {
-        foreach (var comment in Comments)
+        await MainThread.InvokeOnMainThreadAsync(() =>
         {
-            _dbContext.Comments.Remove(comment);
-        }
+            foreach (var comment in Comments)
+            {
+                _dbContext.Comments.Remove(comment);
+            }
 
-        var favouriteStories = _dbContext.StoriesToReadLater
-            .Where(story => story.StoryId == Story.Id);
+            var favouriteStories = _dbContext.StoriesToReadLater
+                .Where(story => story.StoryId == Story.Id);
 
-        foreach (var fs in favouriteStories)
-        {
-            _dbContext.Remove(fs);
-        }
+            foreach (var fs in favouriteStories)
+            {
+                _dbContext.Remove(fs);
+            }
 
-        _dbContext.Remove(Story);
+            _dbContext.Remove(Story);
+        });
+
         await _dbContext.SaveChangesAsync();
+        
+        await App.Current.MainPage.DisplayAlert("Favourite story", "Story was successfully removed.", "Ok");
 
         await Shell.Current.Navigation.PopAsync();
     }
@@ -53,7 +59,10 @@ public partial class StoryInfoViewModel(ApplicationDbContext dbContext) : Observ
 
         await _dbContext.SaveChangesAsync();
 
-        Comments = _dbContext.Comments.Where(story => story.StoryId == Story.Id).ToList();
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            Comments = _dbContext.Comments.Where(story => story.StoryId == Story.Id).ToList();
+        });
     }
 
     [RelayCommand]
@@ -76,8 +85,12 @@ public partial class StoryInfoViewModel(ApplicationDbContext dbContext) : Observ
         Genre = (await _dbContext.Genres.FindAsync(Story.GenreId))!;
         Show = (await _dbContext.Shows.FindAsync(Story.ShowId))!;
         Writer = (await _dbContext.Writers.FindAsync(Story.WriterId))!;
-        Comments = _dbContext.Comments.Where(story => story.StoryId == Story.Id).ToList();
+            
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            Comments = _dbContext.Comments.Where(story => story.StoryId == Story.Id).ToList();
 
-        RemoveButtonStatus = Story.WriterId == App.UserInfo.Id;
+            RemoveButtonStatus = Story.WriterId == App.UserInfo.Id;
+        });
     }
 }

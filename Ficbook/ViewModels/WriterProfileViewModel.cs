@@ -11,10 +11,13 @@ public partial class WriterProfileViewModel(ApplicationDbContext dbContext) : Ob
     [ObservableProperty] private List<Story> _writerStories;
 
     [RelayCommand]
-    private void GetWriterInfo()
+    private async Task GetWriterInfo()
     {
-        Writer = App.UserInfo;
-        WriterStories = dbContext.Stories.Where(story => story.WriterId == Writer.Id).ToList();
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            Writer = App.UserInfo;
+            WriterStories = dbContext.Stories.Where(story => story.WriterId == Writer.Id).ToList();
+        });
     }
     
     [RelayCommand]

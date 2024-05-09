@@ -24,7 +24,7 @@ public partial class RegistrationViewModel(ApplicationDbContext dbContext) : Obs
             !string.IsNullOrWhiteSpace(PasswordConfirmation) && 
             !(Age == 0))
         {
-            if (Writers.Select(writer => writer.Name).Contains(Username))
+            if (Writers.Select(writer => writer.Name).Contains(Username) || Username == "Admin")
             {
                 await App.Current.MainPage.DisplayAlert("Authentication",
                     "Choose other name, this one is taken.", "Ok");
@@ -72,10 +72,10 @@ public partial class RegistrationViewModel(ApplicationDbContext dbContext) : Obs
     }
 
     [RelayCommand]
-    private void GetRequiredInfo()
+    private async Task GetRequiredInfo()
     {
-        Writers = _dbContext.Writers.ToList();
-        
+        await MainThread.InvokeOnMainThreadAsync(() => { Writers = _dbContext.Writers.ToList(); });
+
         Username = "";
         Password = "";
         PasswordConfirmation = "";

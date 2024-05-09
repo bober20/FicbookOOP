@@ -17,19 +17,25 @@ public partial class WriterStoriesViewModel(ApplicationDbContext dbContext) : Ob
     private readonly ApplicationDbContext _dbContext = dbContext;
 
     [RelayCommand]
-    private void GetStoriesInfo()
+    private async Task GetStoriesInfo()
     {
-        Writer = App.UserInfo;
-        PublishedStories = _dbContext.Stories.Where(story => story.WriterId == Writer.Id).ToList();
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            Writer = App.UserInfo;
+            PublishedStories = _dbContext.Stories.Where(story => story.WriterId == Writer.Id).ToList();
+        });
     }
     
     [RelayCommand]
-    private void Refresh()
+    private async Task Refresh()
     {
         IsRefreshing = true;
-        
-        PublishedStories = _dbContext.Stories.Where(story => story.WriterId == Writer.Id).ToList();
-        
+
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            PublishedStories = _dbContext.Stories.Where(story => story.WriterId == Writer.Id).ToList();
+        });
+
         IsRefreshing = false;
     }
 
