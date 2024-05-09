@@ -27,7 +27,12 @@
             ItemDisplayBinding="{Binding Name}"
             ItemsSource="{Binding Genres}"
             SelectedItem="{Binding Genre}"
-            Title="Select story genre..." />
+            Title="Select a genre..." />
+        <Picker
+            ItemDisplayBinding="{Binding Name}"
+            ItemsSource="{Binding Shows}"
+            SelectedItem="{Binding Show}"
+            Title="Select a show..." />
         <Button
             BackgroundColor="Black"
             Command="{Binding AddStoryCommand}"

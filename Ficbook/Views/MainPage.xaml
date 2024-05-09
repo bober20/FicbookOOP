@@ -5,12 +5,12 @@
     x:DataType="viewModels:MainViewModel"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:entities="clr-namespace:Ficbook.ModelsEF"
-    xmlns:tololkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewModels="clr-namespace:Ficbook.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
     <ContentPage.Behaviors>
-        <tololkit:EventToCommandBehavior Command="{Binding UpdateStoriesCollectionsCommand}" EventName="Loaded" />
+        <toolkit:EventToCommandBehavior Command="{Binding GetAllRequiredInfoCommand}" EventName="Loaded" />
     </ContentPage.Behaviors>
 
     <StackLayout>
@@ -21,8 +21,12 @@
             <SearchBar
                 CancelButtonColor="Black"
                 Margin="3,3,3,3"
-                Placeholder="Search stories/authors/genres..."
-                Text="{Binding SearchText}" />
+                Placeholder="Search stories by name..."
+                Text="{Binding SearchText}">
+                <SearchBar.Behaviors>
+                    <toolkit:EventToCommandBehavior Command="{Binding SearchCommand}" EventName="TextChanged" />
+                </SearchBar.Behaviors>
+            </SearchBar>
         </Frame>
         <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
             <ScrollView>
@@ -52,6 +56,62 @@
                                 </CollectionView.ItemTemplate>
                             </CollectionView>
                         </ScrollView>
+                    </StackLayout>
+
+                    <StackLayout Margin="5,5,5,5">
+                        <Label FontSize="Title" Text="Writers" />
+                        <ScrollView Orientation="Horizontal">
+                            <CollectionView ItemsLayout="HorizontalList" ItemsSource="{Binding Writers}">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="entities:Writer">
+                                        <StackLayout
+                                            Margin="0,3,3,3"
+                                            Orientation="Horizontal"
+                                            Padding="2,2,2,2">
+                                            <Frame
+                                                CornerRadius="20"
+                                                HeightRequest="30"
+                                                Padding="0,2,0,0"
+                                                WidthRequest="120">
+                                                <Label HorizontalOptions="Center" Text="{Binding Name}" />
+                                                <Frame.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=GetStoriesByWriterCommand}" CommandParameter="{Binding}" />
+                                                </Frame.GestureRecognizers>
+                                            </Frame>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </ScrollView>
+                    </StackLayout>
+
+                    <StackLayout>
+                        <StackLayout Margin="5,5,5,5">
+                            <Label FontSize="Title" Text="Shows" />
+                            <ScrollView Orientation="Horizontal">
+                                <CollectionView ItemsLayout="HorizontalList" ItemsSource="{Binding Shows}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate x:DataType="entities:Show">
+                                            <StackLayout
+                                                Margin="0,3,3,3"
+                                                Orientation="Horizontal"
+                                                Padding="2,2,2,2">
+                                                <Frame
+                                                    CornerRadius="20"
+                                                    HeightRequest="30"
+                                                    Padding="0,2,0,0"
+                                                    WidthRequest="120">
+                                                    <Label HorizontalOptions="Center" Text="{Binding Name}" />
+                                                    <Frame.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=GetStoriesByShowCommand}" CommandParameter="{Binding}" />
+                                                    </Frame.GestureRecognizers>
+                                                </Frame>
+                                            </StackLayout>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </ScrollView>
+                        </StackLayout>
                     </StackLayout>
 
                     <StackLayout IsVisible="{Binding FavouriteStoriesStatus}" Margin="5,5,5,5">
@@ -129,84 +189,10 @@
                             </CollectionView.ItemTemplate>
                         </CollectionView>
                     </StackLayout>
-
-
-                    <!-- <ScrollView Orientation="Horizontal"> -->
-                    <!--     <StackLayout Margin="5,5,5,5"> -->
-                    <!--         <Label FontSize="Title" Text="Authors" /> -->
-                    <!--  <CollectionView  -->
-                    <!--  ItemsLayout="HorizontalList"  -->
-                    <!--  ItemsSource="{Binding Writers}"  -->
-                    <!--  SelectionMode="Single">  -->
-                    <!--             <CollectionView.ItemTemplate> -->
-                    <!--                 <DataTemplate> -->
-                    <!--  <StackLayout  -->
-                    <!--  HeightRequest="180"  -->
-                    <!--  Margin="0,3,3,3"  -->
-                    <!--  Padding="2,2,2,2"  -->
-                    <!--  WidthRequest="100">  -->
-                    <!--  <Frame  -->
-                    <!--  CornerRadius="20"  -->
-                    <!--  HeightRequest="160"  -->
-                    <!--  Padding="0,0,0,0"  -->
-                    <!--  WidthRequest="100">  -->
-                    <!--  <Image  -->
-                    <!--  HeightRequest="160"  -->
-                    <!--  Source="Ficbook/Resources/Images/author3.png"  -->
-                    <!--  WidthRequest="110" />  -->
-                    <!--                         </Frame> -->
-                    <!--                         <Label Text="{Binding Name}" /> -->
-                    <!--                     </StackLayout> -->
-                    <!--                 </DataTemplate> -->
-                    <!--             </CollectionView.ItemTemplate> -->
-                    <!--         </CollectionView> -->
-                    <!--     </StackLayout> -->
-                    <!-- </ScrollView> -->
-
-
                 </StackLayout>
-
-                <!-- <StackLayout> -->
-                <!--  <CollectionView  -->
-                <!--  ItemsSource="{Binding Stories}"  -->
-                <!--  SelectionChanged="StorySelected"  -->
-                <!--  SelectionMode="Single">  -->
-                <!--         <CollectionView.ItemTemplate> -->
-                <!--             <DataTemplate> -->
-                <!--  <Grid  -->
-                <!--  BackgroundColor="Transparent"  -->
-                <!--  ColumnDefinitions="3*, 7*"  -->
-                <!--  HeightRequest="210">  -->
-                <!--                     <Border HeightRequest="180" StrokeShape="RoundRectangle 20"> -->
-                <!--                         <Image Source="Ficbook/Resources/Images/story.png" /> -->
-                <!--                     </Border> -->
-                <!--    -->
-                <!--  <StackLayout  -->
-                <!--  Grid.Column="1"  -->
-                <!--  Margin="8"  -->
-                <!--  Orientation="Vertical">  -->
-                <!--  <Label  -->
-                <!--  FontAttributes="Bold"  -->
-                <!--  FontSize="20"  -->
-                <!--  Text="{Binding Title}"  -->
-                <!--  TextColor="Black" />  -->
-                <!--  <Label  -->
-                <!--  FontSize="14"  -->
-                <!--  HorizontalTextAlignment="Start"  -->
-                <!--  MaxLines="6"  -->
-                <!--  Text="{Binding Content}"  -->
-                <!--  TextColor="Black" />  -->
-                <!--                     </StackLayout> -->
-                <!--                 </Grid> -->
-                <!--             </DataTemplate> -->
-                <!--         </CollectionView.ItemTemplate> -->
-                <!--     </CollectionView> -->
-                <!-- </StackLayout> -->
-
             </ScrollView>
         </RefreshView>
     </StackLayout>
-
 </ContentPage>
 
 

@@ -6,8 +6,7 @@ using Ficbook.Views;
 
 namespace Ficbook.ViewModels;
 
-//[QueryProperty("Writer", "Writer")]
-public partial class MainViewModel : ObservableObject
+public partial class MainViewModel(ApplicationDbContext dbContext) : ObservableObject
 {
     [ObservableProperty] private List<Genre> _genres;
     [ObservableProperty] private List<Story> _allWritersStories;
@@ -17,27 +16,28 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty] private string _searchText;
     [ObservableProperty] private bool _favouriteStoriesStatus;
     [ObservableProperty] private Writer _writer;
+    [ObservableProperty] private List<Show> _shows;
     
-    private ApplicationDbContext _dbContext;
+    private readonly ApplicationDbContext _dbContext = dbContext;
     
-    public MainViewModel(ApplicationDbContext dbContext)
+    [RelayCommand]
+    private void GetAllRequiredInfo()
     {
-        _dbContext = dbContext;
         Genres = _dbContext.Genres.ToList();
         Writers = _dbContext.Writers.ToList();
+        Shows = _dbContext.Shows.ToList();
+        Writer = App.UserInfo;
+
+        UpdateStoriesCollections();
     }
 
-    [RelayCommand]
     private void UpdateStoriesCollections()
     {
-        Writer = App.UserInfo;
-        
         GetFavouriteStories();
         GetAllStories();
         
         FavouriteStoriesStatus = FavouriteStories.Count != 0;
     }
-
     
     private void GetFavouriteStories()
     {
@@ -71,7 +71,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public void Search()
+    private void Search()
     {
         UpdateStoriesCollections();
         
@@ -91,11 +91,29 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task GetStoriesByGenre(Genre genre)
+    private void GetStoriesByGenre(Genre genre)
     {
         UpdateStoriesCollections();
         
         AllWritersStories = AllWritersStories.Where(story => story.GenreId == genre.Id).ToList();
         FavouriteStories = FavouriteStories.Where(story => story.GenreId == genre.Id).ToList();
+    }
+    
+    [RelayCommand]
+    private void GetStoriesByShow(Show show)
+    {
+        UpdateStoriesCollections();
+        
+        AllWritersStories = AllWritersStories.Where(story => story.ShowId == show.Id).ToList();
+        FavouriteStories = FavouriteStories.Where(story => story.ShowId == show.Id).ToList();
+    }
+    
+    [RelayCommand]
+    private void GetStoriesByWriter(Writer writer)
+    {
+        UpdateStoriesCollections();
+        
+        AllWritersStories = AllWritersStories.Where(story => story.WriterId == writer.Id).ToList();
+        FavouriteStories = FavouriteStories.Where(story => story.WriterId == writer.Id).ToList();
     }
 }

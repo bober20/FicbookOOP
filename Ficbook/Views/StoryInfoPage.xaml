@@ -74,7 +74,7 @@
                 BackgroundColor="Black"
                 Command="{Binding AddStoryToFavouriteCommand}"
                 Margin="3,3,3,3"
-                Text="Add story to favourite" />
+                Text="Add story to favourites" />
             <Entry Placeholder="Comment..." Text="{Binding CommentContent}" />
             <Button
                 BackgroundColor="Black"

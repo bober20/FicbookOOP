@@ -8,19 +8,13 @@ using Ficbook.Views;
 
 namespace Ficbook.ViewModels;
 
-[QueryProperty("Writer", "Writer")]
-public partial class WriterStoriesViewModel : ObservableObject
+public partial class WriterStoriesViewModel(ApplicationDbContext dbContext) : ObservableObject
 {
     [ObservableProperty] private Writer _writer;
     [ObservableProperty] private List<Story> _publishedStories;
     [ObservableProperty] private bool _isRefreshing;
 
-    private readonly ApplicationDbContext _dbContext;
-
-    public WriterStoriesViewModel(ApplicationDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    private readonly ApplicationDbContext _dbContext = dbContext;
 
     [RelayCommand]
     private void GetStoriesInfo()

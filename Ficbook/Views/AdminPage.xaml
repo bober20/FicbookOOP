@@ -2,63 +2,92 @@
 
 <ContentPage
     x:Class="Ficbook.Views.AdminPage"
+    x:DataType="viewModels:AdminViewModel"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:entities="clr-namespace:Ficbook.ModelsEF"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewModels="clr-namespace:Ficbook.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
-    <StackLayout>
-        <Frame Padding="0,0,3,7">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior Command="{Binding GetRequiredInfoCommand}" EventName="Loaded" />
+    </ContentPage.Behaviors>
+
+    <Grid RowDefinitions="*, 8*, 4*, *">
+        <Frame
+            Grid.Row="0"
+            HeightRequest="60"
+            Margin="3,3,3,3"
+            Padding="0,0,3,7">
             <SearchBar
                 CancelButtonColor="Black"
+                Margin="3,3,3,3"
                 Placeholder="Search author..."
-                Text="{Binding SearchText}" />
+                Text="{Binding SearchText}">
+                <SearchBar.Behaviors>
+                    <toolkit:EventToCommandBehavior Command="{Binding SearchCommand}" EventName="TextChanged" />
+                </SearchBar.Behaviors>
+            </SearchBar>
         </Frame>
-        <ScrollView Orientation="Horizontal">
-            <StackLayout Margin="5,5,5,5">
-                <Label FontSize="Title" Text="Authors" />
-                <Label Text="{Binding SelectedWriter.Name}" />
-                <CollectionView
-                    ItemsLayout="HorizontalList"
-                    ItemsSource="{Binding Writers}"
-                    SelectedItem="{Binding SelectedWriter}"
-                    SelectionMode="Single">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <StackLayout
-                                HeightRequest="180"
-                                Margin="0,3,3,3"
-                                Padding="2,2,2,2"
-                                WidthRequest="100">
-                                <Frame
-                                    CornerRadius="20"
-                                    HeightRequest="160"
-                                    Padding="0,0,0,0"
+        <StackLayout Grid.Row="1">
+            <ScrollView Orientation="Horizontal">
+                <StackLayout Margin="5,5,5,5">
+                    <Label FontSize="Title" Text="Ban writer" />
+                    <CollectionView
+                        ItemsLayout="HorizontalList"
+                        ItemsSource="{Binding Writers}"
+                        SelectedItem="{Binding SelectedWriter}"
+                        SelectionMode="Single">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="entities:Writer">
+                                <StackLayout
+                                    HeightRequest="180"
+                                    Margin="0,3,3,3"
+                                    Padding="2,2,2,2"
                                     WidthRequest="100">
-                                    <Image
+                                    <Frame
+                                        CornerRadius="20"
                                         HeightRequest="160"
-                                        Source="Ficbook/Resources/Images/author3.png"
-                                        WidthRequest="110" />
-                                </Frame>
-                                <Label Text="{Binding Name}" />
-                            </StackLayout>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </StackLayout>
-        </ScrollView>
-        <Entry Text="{Binding NotificationContent}" />
-        <Button
-            BackgroundColor="Black"
-            Command="{Binding BanWriterCommand}"
-            Margin="3,3,3,3"
-            Text="Ban user" />
-        <Button
-            BackgroundColor="Black"
-            Command="{Binding UnbanWriterCommand}"
-            Margin="3,3,3,3"
-            Text="Unban user" />
+                                        Padding="0,0,0,0"
+                                        WidthRequest="100">
+                                        <Image
+                                            HeightRequest="160"
+                                            Source="Ficbook/Resources/Images/author3.png"
+                                            WidthRequest="110" />
+                                    </Frame>
+                                    <Label Text="{Binding Name}" />
+                                </StackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+            </ScrollView>
+            <Entry Placeholder="Enter an issue..." Text="{Binding NotificationContent}" />
+            <Button
+                BackgroundColor="Black"
+                Command="{Binding BanWriterCommand}"
+                Margin="3,3,3,3"
+                Text="Ban user" />
+            <Button
+                BackgroundColor="Black"
+                Command="{Binding UnbanWriterCommand}"
+                Margin="3,3,3,3"
+                Text="Unban user" />
+        </StackLayout>
+        <StackLayout Grid.Row="2">
+            <Label FontSize="Title" Text="Add a new show" />
+            <Entry Placeholder="Enter new show's name..." Text="{Binding NewShowName}" />
+            <Button
+                BackgroundColor="Black"
+                Command="{Binding AddShowCommand}"
+                Margin="3,3,3,3"
+                Text="Add show" />
+        </StackLayout>
         <Button
             BackgroundColor="Black"
             Command="{Binding LogOutCommand}"
+            Grid.Row="3"
             Margin="3,3,3,3"
             Text="Log Out" />
-    </StackLayout>
+    </Grid>
 </ContentPage>

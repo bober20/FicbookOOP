@@ -12,7 +12,6 @@ public sealed class ApplicationDbContext : DbContext
     public DbSet<Comment> Comments { get; set; } = null!;
     public DbSet<Admin> Admin { get; set; } = null!;
     public DbSet<StoriesToReadLater> StoriesToReadLater { get; set; } = null!;
-    
     public DbSet<Notification> Notifications { get; set; } = null!;
 
     public ApplicationDbContext()
@@ -40,21 +39,9 @@ public sealed class ApplicationDbContext : DbContext
         
         // Seed Writers
         modelBuilder.Entity<Writer>().HasData(
-            new Writer { Id = 1, Name = "bigfoot", MorePersonalInfo = "There are no words limit or length " +
-                                                                      "restrictions on the manuscripts " +
-                                                                      "submitted to our Journals. " +
-                                                                      "The manuscripts submitted to this " +
-                                                                      "journal should neither be published " +
-                                                                      "before nor be under consideration " +
-                                                                      "for.", IsBanned = false, IsAdmin = false, Age = 34, Password = "12345678"},
+            new Writer { Id = 1, Name = "bigfoot", IsBanned = false, Age = 34, Password = "12345678"},
             
-            new Writer { Id = 2, Name = "lalala", MorePersonalInfo = "There are no words limit or length " +
-                                                                      "restrictions on the manuscripts " +
-                                                                      "submitted to our Journals. " +
-                                                                      "The manuscripts submitted to this " +
-                                                                      "journal should neither be published " +
-                                                                      "before nor be under consideration " +
-                                                                      "for.", IsBanned = false, IsAdmin = false, Age = 26,  Password = "12345678"}
+            new Writer { Id = 2, Name = "lalala", IsBanned = false, Age = 26,  Password = "12345678"}
         );
 
         // Seed Shows
@@ -95,7 +82,7 @@ public sealed class ApplicationDbContext : DbContext
                                                             "cut as before as she reunites with Daryl " +
                                                             "& the others ..." +
                                                             "for publication in another journal.",
-                WriterId = 2, ShowId = 1, GenreId = 8, ImageSource = "https://m.media-amazon.com/images/I/71AJoBx3oDL._AC_UF894,1000_QL80_.jpg"},
+                WriterId = 2, ShowId = 1, GenreId = 8, ImageSource = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSojYhf7F5A9BvDALPcVbt59_heJZIHFK124BpcOXZeZA&s"},
             new Story { Id = 3, Title = "From hell with love", Content = "She's already used to signing like this. " +
                                                                          "Although everyone just calls her Helly. " +
                                                                          "But damn, it sounds so American. She didn't like it. Not even that," +
@@ -107,8 +94,8 @@ public sealed class ApplicationDbContext : DbContext
                                                                          "calls her Helly ( because “Damn”** sounds offensive, " +
                                                                          "and in the USA you have to be very careful with insults lately). " +
                                                                          "The girl has to endure this every day.", 
-                WriterId = 1, ShowId = 2, GenreId = 8, ImageSource = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSojYhf7F5A9BvDALPcVbt59_heJZIHFK124BpcOXZeZA&s"},
-            new Story { Id = 4, Title = "Close Encounters of the Hot Priest Kind", Content = "My morning goes by quite calmly, but by lunchtime, " +
+                WriterId = 1, ShowId = 2, GenreId = 8, ImageSource = "https://m.media-amazon.com/images/I/71AJoBx3oDL._AC_UF894,1000_QL80_.jpg"},
+            new Story { Id = 4, Title = "Close Encounters of the Priest Kind", Content = "My morning goes by quite calmly, but by lunchtime, " +
                     "right in the hustle and bustle of work, " +
                     "the largest bouquet of flowers that " +
                     "I have ever been given arrived. " +

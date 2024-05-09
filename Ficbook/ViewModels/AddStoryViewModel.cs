@@ -6,21 +6,18 @@ using Ficbook.Services;
 namespace Ficbook.ViewModels;
 
 [QueryProperty(nameof(Writer), nameof(Writer))]
-public partial class AddStoryViewModel : ObservableObject
+public partial class AddStoryViewModel(ApplicationDbContext dbContext) : ObservableObject
 {
     [ObservableProperty] private string _title;
     [ObservableProperty] private string _content;
     [ObservableProperty] private string _imageUrl;
     [ObservableProperty] private Genre _genre;
+    [ObservableProperty] private Show _show;
     [ObservableProperty] private List<Genre> _genres;
+    [ObservableProperty] private List<Show> _shows;
     [ObservableProperty] private Writer _writer;
     
-    private ApplicationDbContext _dbContext;
-
-    public AddStoryViewModel(ApplicationDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    private readonly ApplicationDbContext _dbContext = dbContext;
     
     [RelayCommand]
     private async Task AddStory()
@@ -28,14 +25,13 @@ public partial class AddStoryViewModel : ObservableObject
         if (!string.IsNullOrWhiteSpace(Title) ||
             !string.IsNullOrWhiteSpace(Content) ||
             !string.IsNullOrWhiteSpace(ImageUrl))
-            
         {
             Story newStory = new Story
             {
                 Title = Title,
                 Content = Content,
                 WriterId = Writer.Id,
-                ShowId = 1,
+                ShowId = Show.Id,
                 GenreId = Genre.Id,
                 ImageSource = ImageUrl
             };
@@ -55,6 +51,8 @@ public partial class AddStoryViewModel : ObservableObject
     private void GetAllRequiredInformation()
     {
         Genres = _dbContext.Genres.ToList();
+        Shows = _dbContext.Shows.ToList();
+        Show = Shows[0];
         Genre = Genres[0];
     }
 }

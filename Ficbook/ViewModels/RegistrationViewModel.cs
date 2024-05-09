@@ -5,29 +5,24 @@ using Ficbook.Services;
 
 namespace Ficbook.ViewModels;
 
-public partial class RegistrationViewModel : ObservableObject
+public partial class RegistrationViewModel(ApplicationDbContext dbContext) : ObservableObject
 {
     [ObservableProperty] private string _username;
-    
     [ObservableProperty] private string _password;
-
     [ObservableProperty] private string _passwordConfirmation;
-    
     [ObservableProperty] private List<Writer> _writers;
-    private ApplicationDbContext _dbContext;
+    [ObservableProperty] private int _age;
+    [ObservableProperty] private Writer _writer;
     
-    public RegistrationViewModel(ApplicationDbContext dbContext)
-    {
-        _dbContext = dbContext;
-        Writers = _dbContext.Writers.ToList();
-    }
+    private readonly ApplicationDbContext _dbContext = dbContext;
 
     [RelayCommand]
     public async Task SignUp()
     {
         if (!string.IsNullOrWhiteSpace(Username) && 
             !string.IsNullOrWhiteSpace(Password) && 
-            !string.IsNullOrWhiteSpace(PasswordConfirmation))
+            !string.IsNullOrWhiteSpace(PasswordConfirmation) && 
+            !(Age == 0))
         {
             if (Writers.Select(writer => writer.Name).Contains(Username))
             {
@@ -50,16 +45,19 @@ public partial class RegistrationViewModel : ObservableObject
             await _dbContext.AddAsync(new Writer
             {
                 Name = Username,
-                Age = 18,
-                IsAdmin = false,
+                Age = Age,
                 IsBanned = false,
                 Password = Password,
-                MorePersonalInfo = "I am a writer."
             });
 
             await _dbContext.SaveChangesAsync();
             
             await Shell.Current.GoToAsync($"//LoginPage");
+            
+            Username = "";
+            Password = "";
+            PasswordConfirmation = "";
+            Age = 0;
         }
         else
         {
@@ -71,5 +69,16 @@ public partial class RegistrationViewModel : ObservableObject
     public async Task GoToLoginPage()
     {
         await Shell.Current.GoToAsync($"//LoginPage");
+    }
+
+    [RelayCommand]
+    private void GetRequiredInfo()
+    {
+        Writers = _dbContext.Writers.ToList();
+        
+        Username = "";
+        Password = "";
+        PasswordConfirmation = "";
+        Age = 0;
     }
 }

@@ -5,38 +5,29 @@ using Ficbook.Services;
 
 namespace Ficbook.ViewModels;
 
-public partial class AdminViewModel : ObservableObject
+public partial class AdminViewModel(ApplicationDbContext dbContext) : ObservableObject
 {
     [ObservableProperty] private List<Writer> _writers;
     [ObservableProperty] private Writer _selectedWriter;
     [ObservableProperty] private string _notificationContent;
     [ObservableProperty] private string _searchText;
+    [ObservableProperty] private string _newShowName;
     
-    private ApplicationDbContext _dbContext;
-
-    public AdminViewModel(ApplicationDbContext dbContext)
-    {
-        _dbContext = dbContext;
-        
-        Writers = _dbContext.Writers.Where(writer => writer.IsAdmin == false).ToList();
-        SelectedWriter = Writers[0];
-    }
+    private readonly ApplicationDbContext _dbContext = dbContext;
 
     [RelayCommand]
     private async void BanWriter()
     {
         if (SelectedWriter.IsBanned)
         {
-            await App.Current.MainPage.DisplayAlert("Writers list",
-                "Writer is already banned.", "Ok");
+            await App.Current.MainPage.DisplayAlert("Writers list", "Writer is already banned.", "Ok");
             
             return;
         }
 
         if (string.IsNullOrWhiteSpace(NotificationContent))
         {
-            await App.Current.MainPage.DisplayAlert("Writers list",
-                "Notification content is empty.", "Ok");
+            await App.Current.MainPage.DisplayAlert("Writers list", "Notification content is empty.", "Ok");
             
             return;
         }
@@ -52,6 +43,9 @@ public partial class AdminViewModel : ObservableObject
         });
 
         await _dbContext.SaveChangesAsync();
+        await App.Current.MainPage.DisplayAlert("Writers list", "Writer was successfully banned.", "Ok");
+
+        NotificationContent = "";
     }
     
     [RelayCommand]
@@ -59,14 +53,12 @@ public partial class AdminViewModel : ObservableObject
     {
         if (!SelectedWriter.IsBanned)
         {
-            await App.Current.MainPage.DisplayAlert("Writers list",
-                "Writer is unbanned.", "Ok");
+            await App.Current.MainPage.DisplayAlert("Writers list", "Writer is unbanned.", "Ok");
             
             return;
         }
 
         SelectedWriter.IsBanned = false;
-
         var notifications = _dbContext.Notifications
             .Where(n => n.IsProblemSolved == false && n.WriterId == SelectedWriter.Id).ToList();
 
@@ -81,6 +73,8 @@ public partial class AdminViewModel : ObservableObject
         }
         
         await _dbContext.SaveChangesAsync();
+        
+        await App.Current.MainPage.DisplayAlert("Writers list", "Writer was successfully unbanned.", "Ok");
     }
 
     [RelayCommand]
@@ -89,8 +83,37 @@ public partial class AdminViewModel : ObservableObject
         await Shell.Current.GoToAsync($"//LoginPage");
     }
     
-    public void Search()
+    [RelayCommand]
+    private void Search()
     {
         Writers = _dbContext.Writers.Where(writer => writer.Name.Contains(SearchText)).ToList();
+    }
+
+    [RelayCommand]
+    private async Task AddShow()
+    {
+        if (!string.IsNullOrWhiteSpace(NewShowName))
+        {
+            await _dbContext.AddAsync(new Show
+            {
+                Name = NewShowName
+            });
+            await _dbContext.SaveChangesAsync();
+            
+            await App.Current.MainPage.DisplayAlert("Shows", "Show was successfully added.", "Ok");
+        }
+        else
+        {
+            await App.Current.MainPage.DisplayAlert("Shows", "Show was not added. Fields are empty.", "Ok");
+        }
+        
+        NewShowName = "";
+    }
+
+    [RelayCommand]
+    private void GetRequiredInfo()
+    {
+        Writers = _dbContext.Writers.ToList();
+        SelectedWriter = Writers[0];
     }
 }

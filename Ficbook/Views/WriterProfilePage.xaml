@@ -18,7 +18,6 @@
             <ScrollView>
                 <Grid RowDefinitions="*, *">
                     <Frame
-                        CornerRadius="30"
                         Grid.Row="0"
                         HeightRequest="400"
                         HorizontalOptions="FillAndExpand"
@@ -43,10 +42,10 @@
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
-                        <Label
-                            FontSize="15"
-                            HorizontalTextAlignment="Start"
-                            Text="{Binding Writer.MorePersonalInfo}" />
+                        <!--  <Label  -->
+                        <!--  FontSize="15"  -->
+                        <!--  HorizontalTextAlignment="Start"  -->
+                        <!--  Text="{Binding Writer.MorePersonalInfo}" />  -->
                     </StackLayout>
                 </Grid>
             </ScrollView>

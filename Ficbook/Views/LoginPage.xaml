@@ -6,8 +6,14 @@
     x:Class="Ficbook.Views.LoginPage"
     x:DataType="viewModels:LoginViewModel"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewModels="clr-namespace:Ficbook.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior Command="{Binding GetRequiredInfoCommand}" EventName="Loaded" />
+    </ContentPage.Behaviors>
+
     <Frame
         CornerRadius="30"
         HeightRequest="430"

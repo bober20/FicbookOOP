@@ -5,23 +5,16 @@ using Ficbook.Services;
 
 namespace Ficbook.ViewModels;
 
-// [QueryProperty("Writer", "Writer")]
-public partial class WriterProfileViewModel : ObservableObject
+public partial class WriterProfileViewModel(ApplicationDbContext dbContext) : ObservableObject
 {
-    [ObservableProperty]
-    private Writer _writer;
-    
-    [ObservableProperty] private bool _isRefreshing;
-
-    public WriterProfileViewModel(ApplicationDbContext dbContext)
-    {
-        
-    }
+    [ObservableProperty] private Writer _writer;
+    [ObservableProperty] private List<Story> _writerStories;
 
     [RelayCommand]
     private void GetWriterInfo()
     {
         Writer = App.UserInfo;
+        WriterStories = dbContext.Stories.Where(story => story.WriterId == Writer.Id).ToList();
     }
     
     [RelayCommand]
@@ -32,25 +25,6 @@ public partial class WriterProfileViewModel : ObservableObject
             Preferences.Remove(nameof(App.UserInfo));
         }
         
-        //var t = Shell.Current.Tab
-        
-        //Shell.Current.CurrentPage.Navigation.RemovePage(Shell.Current);
         await Shell.Current.GoToAsync($"//LoginPage");
     }
-
-    // [RelayCommand]
-    // private void DeleteAccount()
-    // {
-    //     
-    // }
-    
-    // [RelayCommand]
-    // private void Refresh()
-    // {
-    //     IsRefreshing = true;
-    //     
-    //     PublishedStories = _dbContext.Stories.Where(story => story.WriterId == Writer.Id).ToList();
-    //     
-    //     IsRefreshing = false;
-    // }
 }
