@@ -36,7 +36,7 @@ public partial class MainViewModel(ApplicationDbContext dbContext) : ObservableO
     private async Task UpdateStoriesCollections()
     {
         await GetFavouriteStories();
-        await  GetAllStories();
+        await GetAllStories();
        
         await MainThread.InvokeOnMainThreadAsync(() =>
         {

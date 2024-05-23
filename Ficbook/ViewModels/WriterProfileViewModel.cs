@@ -23,9 +23,9 @@ public partial class WriterProfileViewModel(ApplicationDbContext dbContext) : Ob
     [RelayCommand]
     private async void LogOut()
     {
-        if (Preferences.ContainsKey(nameof(App.UserInfo)))
+        if (Preferences.ContainsKey("User"))
         {
-            Preferences.Remove(nameof(App.UserInfo));
+            Preferences.Remove("User");
         }
         
         await Shell.Current.GoToAsync($"//LoginPage");

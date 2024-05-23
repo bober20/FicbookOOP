@@ -1,39 +1,20 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <Shell
-    Shell.FlyoutBehavior="Disabled"
+    FlyoutBehavior="Disabled"
     x:Class="Ficbook.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:views="clr-namespace:Ficbook.Views"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
+    <!--  <ShellContent  -->
+    <!--  ContentTemplate="{DataTemplate views:LoadingPage}"  -->
+    <!--  Route="LoadingPage"  -->
+    <!--  Title="Loading" />  -->
+
     <ShellContent
         ContentTemplate="{DataTemplate views:LoginPage}"
         Route="LoginPage"
         Title="Login" />
-
-    <ShellContent
-        ContentTemplate="{DataTemplate views:RegistrationPage}"
-        Route="RegistrationPage"
-        Title="Registration" />
-
-    <!-- <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" Route="AuthorPage"> -->
-    <!--  <ShellContent  -->
-    <!--  ContentTemplate="{DataTemplate views:MainPage}"  -->
-    <!--  Route="Home"  -->
-    <!--  Title="Home" />  -->
-    <!--  <ShellContent  -->
-    <!--  ContentTemplate="{DataTemplate views:WriterStoriesPage}"  -->
-    <!--  Route="Stories"  -->
-    <!--  Title="My stories" />  -->
-    <!--  <ShellContent  -->
-    <!--  ContentTemplate="{DataTemplate views:NotificationsPage}"  -->
-    <!--  Route="Notifications"  -->
-    <!--  Title="Notifications" />  -->
-    <!--  <ShellContent  -->
-    <!--  ContentTemplate="{DataTemplate views:WriterProfilePage}"  -->
-    <!--  Route="Profile"  -->
-    <!--  Title="Profile" />  -->
-    <!-- </FlyoutItem> -->
 
     <TabBar Route="AuthorPage">
         <Tab Icon="home_icon.svg" Title="Home">
@@ -50,6 +31,11 @@
         </Tab>
     </TabBar>
 
+    <ShellContent
+        ContentTemplate="{DataTemplate views:RegistrationPage}"
+        Route="RegistrationPage"
+        Title="Registration" />
+
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" Route="AdminPage">
         <ShellContent
             ContentTemplate="{DataTemplate views:AdminPage}"
@@ -59,3 +45,23 @@
 
 </Shell>
 
+
+
+<!-- <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" Route="AuthorPage"> -->
+<!--  <ShellContent  -->
+<!--  ContentTemplate="{DataTemplate views:MainPage}"  -->
+<!--  Route="Home"  -->
+<!--  Title="Home" />  -->
+<!--  <ShellContent  -->
+<!--  ContentTemplate="{DataTemplate views:WriterStoriesPage}"  -->
+<!--  Route="Stories"  -->
+<!--  Title="My stories" />  -->
+<!--  <ShellContent  -->
+<!--  ContentTemplate="{DataTemplate views:NotificationsPage}"  -->
+<!--  Route="Notifications"  -->
+<!--  Title="Notifications" />  -->
+<!--  <ShellContent  -->
+<!--  ContentTemplate="{DataTemplate views:WriterProfilePage}"  -->
+<!--  Route="Profile"  -->
+<!--  Title="Profile" />  -->
+<!-- </FlyoutItem> -->

@@ -32,15 +32,8 @@ public partial class LoginViewModel(ApplicationDbContext dbContext) : Observable
                     }
         
                     string userDetails = JsonConvert.SerializeObject(writer);
-                    Preferences.Set(nameof(App.UserInfo), userDetails);
+                    Preferences.Set("User", userDetails);
                     App.UserInfo = writer;
-                    
-                    // IDictionary<string, object> parameters = new Dictionary<string, object>()
-                    // {
-                    //     { "Writer", writer }
-                    // };
-                    //
-                    // await Shell.Current.GoToAsync($"//AuthorPage", parameters);
                     
                     await Shell.Current.GoToAsync($"//AuthorPage");
                         
@@ -74,11 +67,31 @@ public partial class LoginViewModel(ApplicationDbContext dbContext) : Observable
     [RelayCommand]
     private async Task GetRequiredInfo()
     {
+        // if (App.UserInfo != null)
+        // {
+        //     await Shell.Current.GoToAsync($"//AuthorPage");
+        // }
+        
         await MainThread.InvokeOnMainThreadAsync(() =>
         {
             _writers = _dbContext.Writers.ToList();
             _admin = _dbContext.Admin.First();
         });
     }
+
+    // [RelayCommand]
+    // private async void Appearing()
+    // {
+    //     var user = App.UserInfo;
+    //
+    //     if (user != null)
+    //     {
+    //         await Shell.Current.GoToAsync($"//AuthorPage");
+    //     }
+    //     else
+    //     {
+    //         await Shell.Current.GoToAsync($"//LoginPage");
+    //     }
+    // }
 }
 

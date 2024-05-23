@@ -50,6 +50,12 @@ public partial class StoryInfoViewModel(ApplicationDbContext dbContext) : Observ
     [RelayCommand]
     private async Task AddComment()
     {
+        if (string.IsNullOrWhiteSpace(CommentContent))
+        {
+            await App.Current.MainPage.DisplayAlert("Comment", "Error. Comment field is empty.", "Ok");
+            return;
+        }
+        
         await _dbContext.AddAsync(new Comment
         {
             Content = CommentContent,
